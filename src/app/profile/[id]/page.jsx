@@ -36,13 +36,13 @@ function Page({params}) {
         setIsFollowed(res.data.user[0].isFollwed);
         setFollowerCount(res.data.user[0].followerCount)
         setQuotes(res.data.quote);
-        console.log("Quote Owner",res.data.quote[0]._id);
+      //  console.log("Quote Owner",res.data.quote[0].Owner);
        }
        const getUser = async () => {
         try {
-          const res = await axios.get("http://localhost:3000/api/users/login");
+          const res = await axios.get("/api/users/login");
           setCurrentUser(res.data.data);
-          console.log("CUrrent user",res.data.data._id);
+         // console.log("CUrrent user",res.data.data._id);
         } catch (error) {
           console.error("Error fetching user:", error);
         }
@@ -57,10 +57,10 @@ function Page({params}) {
            router.push("/");
        }
        const handleFollow =async () => {
-    const res = await axios.post(`http://localhost:3000/api/users/follow/${params.id}`);
+    const res = await axios.post(`/api/users/follow/${params.id}`);
     setIsFollowed(!isFollowed);
     setFollowerCount(prevCount => isFollowed ? prevCount - 1 : prevCount + 1);
-    console.log(res.data);
+   // console.log(res.data);
     }
     const handleshowCard=()=>{
       setCardHidden(true);
@@ -103,7 +103,7 @@ function Page({params}) {
            </div>
         </div>
         <div className="w-full h-[60px] bg-gray-100 flex justify-around items-center ">
-       {CurrentUser?._id === quotes.Owner?
+       {CurrentUser?._id === quotes[0].Owner?
        <>
        <button 
         onClick={handleEditProfile}

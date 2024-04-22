@@ -25,7 +25,7 @@ function Page() {
         router.push("/");
     }
    const getProfile=async()=>{
-    const res=await axios.get("http://localhost:3000/api/users/post");
+    const res=await axios.get("/api/users/post");
    // console.log(res.data.UserDetails[0]);
     setUser(res.data.UserDetails[0]);
     setQuotes(res.data.quote);

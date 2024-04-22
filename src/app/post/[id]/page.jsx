@@ -25,7 +25,7 @@ function Page({ params }) {
   useEffect(() => {
     const getQuote = async () => {
       try {
-        const res = await axios.patch(`http://localhost:3000/api/users/post`,{id:params.id});
+        const res = await axios.patch(`/api/users/post`,{id:params.id});
         console.log(res.data);
         setQuote(res.data.quote);
         setQuoteText(res.data.quote.quote);
@@ -40,7 +40,7 @@ function Page({ params }) {
 
     const getUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/users/login");
+        const res = await axios.get("/api/users/login");
         setUser(res.data.data);
       } catch (error) {
         console.error("Error fetching user:", error);

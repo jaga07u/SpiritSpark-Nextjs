@@ -66,7 +66,7 @@ function Page() {
     formData.append('TextCol', TextCol);
   
     try {
-      const res = await axios.post("http://localhost:3000/api/users/post", formData);
+      const res = await axios.post("/api/users/post", formData);
       const response = res.data;
       console.log(response);
       toast.success("Your post Uploaded Successfully")
