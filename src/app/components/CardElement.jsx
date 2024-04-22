@@ -21,7 +21,7 @@ function CardElement({hiddenble,User}) {
     }
     const handleLike = async (id) => {
         console.log(id);
-        const res = await axios.post(`http://localhost:3000/api/users/like`, { quoteId: id });
+        const res = await axios.post(`/api/users/like`, { quoteId: id });
         setIsCurrentUserLiked(!IsCurrentUserLiked);
         setLikeCount(prevCount => IsCurrentUserLiked ? prevCount - 1 : prevCount + 1);
         console.log(res.data);
