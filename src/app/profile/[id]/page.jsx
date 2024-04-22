@@ -29,7 +29,7 @@ function Page({params}) {
     setHidden(true);
 }
     const getProfile=async()=>{
-        const res=await axios.get(`http://localhost:3000/api/users/${params.id}`);
+        const res=await axios.get(`/api/users/${params.id}`);
        // console.log(res.data.UserDetails[0]);
         setUser(res.data.user[0]);
         //console.log(res.data.user);
