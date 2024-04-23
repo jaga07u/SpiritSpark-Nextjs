@@ -125,9 +125,9 @@ function CardElement({hiddenble,User}) {
             </div>
            </div>
          <div>
-         <div className="dropdown bg-transparent border-none shadow-none">
-  <div tabIndex={0} role="button" className="btn m-1"><BsThreeDotsVertical /></div>
-  <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-[100px] mx-[-70px]">
+         <div className="dropdown bg-white border-none shadow-none">
+  <div tabIndex={0} role="button" className="btn m-1 bg-white"><BsThreeDotsVertical /></div>
+  <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-white rounded-box w-[100px] mx-[-70px]">
     <li><a>EditPost</a></li>
     <li><a>DeletePost</a></li>
   </ul>
