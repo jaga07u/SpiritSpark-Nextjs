@@ -83,7 +83,7 @@ const handleshowCard=()=>{
         onClick={handleEditProfile}
         className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg w-[100px] h-[40px] text-lg bg-blue-500">EditProfile</button>
         </div>
-        <div className="w-full  flex gap-[3px] flex-wrap ">
+        <div className="w-full  flex gap-[3px] flex-wrap bg-white ">
           {
             quotes?.map((items,index)=>(
                 <>

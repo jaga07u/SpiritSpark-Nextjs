@@ -84,7 +84,7 @@ export default function Home() {
       <div className="w-[100vw] h-[100vh]">
        <Nav />  {/* Show Nav only if isNavVisible is true */}
         {quotes.length > 0 ? (
-          <div className="w-full min-h-full flex flex-col justify-center items-center gap-5 my-[20px]">
+          <div className="w-full min-h-full flex flex-col justify-center items-center gap-5 my-[20px] bg-white">
             {quotes.map((item) => (
               <Cards key={item._id} Data={item} User={user} />
             ))}
