@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
 import Cards from "./components/Cards";
 import Nav from "./components/Nav";
@@ -10,6 +10,7 @@ import { AppContext } from "./contex/Contex";
 import UserProfile from "./components/UserProfile";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faOm } from '@fortawesome/free-solid-svg-icons';
+import { LocomotiveScrollProvider } from 'react-locomotive-scroll'
 
 export default function Home() {
   const [quotes, setQuotes] = useState([]);
@@ -71,6 +72,7 @@ export default function Home() {
     setScrollDirection(currentScrollY > lastScrollY ? "down" : "up");
     setLastScrollY(currentScrollY);
   };
+  const containerRef = useRef(null);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -80,8 +82,24 @@ export default function Home() {
     };
   }, [lastScrollY]);
   return (
+    <LocomotiveScrollProvider
+  options={
+    {
+      smooth: true,
+      // ... all available Locomotive Scroll instance options 
+    }
+  }
+  watch={
+    [
+      //..all the dependencies you want to watch to update the scroll.
+      //  Basicaly, you would want to watch page/location changes
+      //  For exemple, on Next.js you would want to watch properties like `router.asPath` (you may want to add more criterias if the instance should be update on locations with query parameters)
+    ]
+  }
+  containerRef={containerRef}
+>
     <AppContext.Provider value={{ QuoteDetails, setQuoteDetails, UserCard, setUserCard }}>
-      <div className="w-[100vw] h-[100vh]">
+      <div ref={containerRef} data-scroll-container className="w-[100vw] h-[100vh]">
        <Nav />  {/* Show Nav only if isNavVisible is true */}
         {quotes.length > 0 ? (
           <div className="w-full min-h-full flex flex-col justify-center items-center gap-5 my-[20px] bg-white">
@@ -100,5 +118,6 @@ export default function Home() {
         <Fnav UserDetails={user} />
       </div>
     </AppContext.Provider>
+    </LocomotiveScrollProvider>
   );
 }
