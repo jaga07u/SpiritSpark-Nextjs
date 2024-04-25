@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cards from "./components/Cards";
 import Nav from "./components/Nav";
@@ -10,7 +10,6 @@ import { AppContext } from "./contex/Contex";
 import UserProfile from "./components/UserProfile";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faOm } from '@fortawesome/free-solid-svg-icons';
-import LocomotiveScroll from 'locomotive-scroll';
 
 export default function Home() {
   const [quotes, setQuotes] = useState([]);
@@ -22,8 +21,6 @@ export default function Home() {
   const [UserCard,setUserCard]=useState(null);
   const [scrollDirection, setScrollDirection] = useState(null);
   const limit = 8;
-  const containerRef = useRef(null);
-  let scroll;
 
   const getUser = async () => {
     try {
@@ -70,35 +67,21 @@ export default function Home() {
   }, []);
 
   const handleScroll = () => {
-    const currentScrollY = scroll.scroll.instance.scroll.y;
+    const currentScrollY = window.scrollY;
     setScrollDirection(currentScrollY > lastScrollY ? "down" : "up");
     setLastScrollY(currentScrollY);
   };
 
   useEffect(() => {
-    scroll = new LocomotiveScroll({
-      el: containerRef.current,
-      smooth: true
-    });
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      if (scroll) scroll.destroy();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (scroll) {
-      scroll.on('scroll', handleScroll);
-    }
-
-    return () => {
-      if (scroll) scroll.off('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
-
   return (
     <AppContext.Provider value={{ QuoteDetails, setQuoteDetails, UserCard, setUserCard }}>
-      <div ref={containerRef} data-scroll-container className="w-[100vw] h-[100vh]">
+      <div className="w-[100vw] h-[100vh]">
        <Nav />  {/* Show Nav only if isNavVisible is true */}
         {quotes.length > 0 ? (
           <div className="w-full min-h-full flex flex-col justify-center items-center gap-5 my-[20px] bg-white">
