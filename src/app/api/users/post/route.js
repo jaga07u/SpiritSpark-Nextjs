@@ -15,9 +15,9 @@ export async function POST(request){
       //console.log(token.value);
       const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
       const UserId=decodeUser._id;
-//       const reqBody=await request.formData();
-//     //   const {quote,bgColor,TextCol}=reqBody;
-//     //   console.log(reqBody);
+      const reqBody=await request.formData();
+      const {quote,bgColor,TextCol}=reqBody;
+      console.log(reqBody);
 //       //console.log(file);
 //       const quote = reqBody.get('quote');
 // const bgColor = reqBody.get('bgColor');
@@ -64,7 +64,7 @@ export async function POST(request){
 //      }
     return NextResponse.json({
         //quotes,
-        UserId,
+        reqBody,
         message:"Post Created Successfully"
     })
 }
