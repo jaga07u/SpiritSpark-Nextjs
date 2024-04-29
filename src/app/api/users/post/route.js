@@ -8,6 +8,7 @@ import mongoose,{Schema} from "mongoose";
 import {writeFile} from "fs/promises"
 import { uploadOnCloudinary } from "@/helper/CloudinaryEnv";
 import { User } from "@/models/user.model";
+import { error } from "console";
 connect();
 export async function POST(request){
   const token =cookies().get("Token");
@@ -39,6 +40,9 @@ if(files.length>0){
  // console.log(path);
    quotebgImage=await uploadOnCloudinary(path)
 }
+ if(!quotebgImage){
+  throw new error("quotebgImage is not uploaded")
+ }
 console.log(quotebgImage);
   // if(!quotebgImage){
   //   throw new Error("someting went wrong at image uplaoding")
@@ -55,6 +59,9 @@ console.log(quotebgImage);
             Owner:UserId
         }
     )
+    if(!quote){
+      throw new error("someting went to Quote generate")
+     }
     return NextResponse.json({
         quotes,
         message:"Post Created Successfully"
