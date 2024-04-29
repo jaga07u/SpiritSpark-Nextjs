@@ -65,7 +65,7 @@ const file=files[0];
 //      }
     return NextResponse.json({
         //quotes,
-        file,
+        files,
         message:"Post Created Successfully"
     })
 }
