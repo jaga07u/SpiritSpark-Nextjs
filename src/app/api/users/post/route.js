@@ -64,7 +64,7 @@ export async function POST(request){
 //      }
     return NextResponse.json({
         //quotes,
-        reqBody,
+        quote,
         message:"Post Created Successfully"
     })
 }
