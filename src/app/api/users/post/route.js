@@ -20,9 +20,9 @@ export async function POST(request){
       // console.log(reqBody);
 //       //console.log(file);
       const quote = reqBody.get('quote');
-// const bgColor = reqBody.get('bgColor');
-// const textCol = reqBody.get('TextCol');
-// const catagory=reqBody.get('catagory');
+const bgColor = reqBody.get('bgColor');
+const textCol = reqBody.get('TextCol');
+const catagory=reqBody.get('catagory');
 
 // // Get file(s)
 // const files = reqBody.getAll('file');
@@ -64,7 +64,7 @@ export async function POST(request){
 //      }
     return NextResponse.json({
         //quotes,
-        quote,
+        bgColor,textCol,catagory,
         message:"Post Created Successfully"
     })
 }
