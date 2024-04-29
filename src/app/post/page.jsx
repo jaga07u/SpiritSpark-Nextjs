@@ -53,11 +53,12 @@ function Page() {
     formData.append('quote', quote);
     formData.append('catagory', catagory);
     // Append file data to FormData
-    if (imagefile) {
-      for (let i = 0; i < imagefile.length; i++) {
-        formData.append('file', imagefile[i]);
-      }
-    }
+    formData.append('file',imagefile);
+    // if (imagefile) {
+    //   for (let i = 0; i < imagefile.length; i++) {
+    //     formData.append('file', imagefile[i]);
+    //   }
+    // }
     if(!color.length>0){
        setError(true);
        return;
