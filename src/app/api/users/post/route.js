@@ -29,7 +29,7 @@ const files = reqBody.get('file');
 // // console.log(quote);
 // // console.log(bgColor);
 // // console.log(textCol);
-// let quotebgImage="";
+ let quotebgImage="";
 // console.log(files.length);
 // if(files.length>0){
 //   const file=files[0];
@@ -54,23 +54,22 @@ const files = reqBody.get('file');
 //   //   throw new Error("someting went wrong at image uplaoding")
 //   // }
       
-//       const quotes=await Quote.create(
-//         {
-//             title:"title",
-//             quote,
-//             catagory,
-//             BgImageUrl:quotebgImage?.url || "",
-//             BgColor:bgColor,
-//             TextColor:textCol,
-//             Owner:UserId
-//         }
-//     )
+      const quotes=await Quote.create(
+        {
+            title:"title",
+            quote,
+            catagory,
+            BgImageUrl:quotebgImage?.url || "",
+            BgColor:bgColor,
+            TextColor:textCol,
+            Owner:UserId
+        }
+    )
 //     if(!quote){
 //       throw new error("someting went to Quote generate")
 //      }
     return NextResponse.json({
-        //quotes,
-        data:files,
+        quotes,
         message:"Post Created Successfully"
     })
 }
