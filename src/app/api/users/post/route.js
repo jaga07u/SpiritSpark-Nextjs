@@ -11,10 +11,10 @@ import { User } from "@/models/user.model";
 import { error } from "console";
 connect();
 export async function POST(request){
-//   const token =cookies().get("Token");
-//       //console.log(token.value);
-//       const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
-//       const UserId=decodeUser._id;
+  const token =cookies().get("Token");
+      //console.log(token.value);
+      const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
+      const UserId=decodeUser._id;
 //       const reqBody=await request.formData();
 //     //   const {quote,bgColor,TextCol}=reqBody;
 //     //   console.log(reqBody);
@@ -64,6 +64,7 @@ export async function POST(request){
 //      }
     return NextResponse.json({
         //quotes,
+        UserId,
         message:"Post Created Successfully"
     })
 }
