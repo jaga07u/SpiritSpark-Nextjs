@@ -24,7 +24,7 @@ const bgColor = reqBody.get('bgColor');
 const textCol = reqBody.get('TextCol');
 const catagory=reqBody.get('catagory');
 // // Get file(s)
-const files = reqBody.getAll('file');
+const files = reqBody.get('file');
 const file=files[0];
 // // console.log(quote);
 // // console.log(bgColor);
