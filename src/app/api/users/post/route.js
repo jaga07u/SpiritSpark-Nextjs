@@ -11,59 +11,59 @@ import { User } from "@/models/user.model";
 import { error } from "console";
 connect();
 export async function POST(request){
-  const token =cookies().get("Token");
-      //console.log(token.value);
-      const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
-      const UserId=decodeUser._id;
-      const reqBody=await request.formData();
-    //   const {quote,bgColor,TextCol}=reqBody;
-    //   console.log(reqBody);
-      //console.log(file);
-      const quote = reqBody.get('quote');
-const bgColor = reqBody.get('bgColor');
-const textCol = reqBody.get('TextCol');
-const catagory=reqBody.get('catagory');
+//   const token =cookies().get("Token");
+//       //console.log(token.value);
+//       const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
+//       const UserId=decodeUser._id;
+//       const reqBody=await request.formData();
+//     //   const {quote,bgColor,TextCol}=reqBody;
+//     //   console.log(reqBody);
+//       //console.log(file);
+//       const quote = reqBody.get('quote');
+// const bgColor = reqBody.get('bgColor');
+// const textCol = reqBody.get('TextCol');
+// const catagory=reqBody.get('catagory');
 
-// Get file(s)
-const files = reqBody.getAll('file');
-// console.log(quote);
-// console.log(bgColor);
-// console.log(textCol);
-let quotebgImage="";
-console.log(files.length);
-if(files.length>0){
-  const file=files[0];
-  const byteData=await file.arrayBuffer();
-  const buffer=Buffer.from(byteData);
-  const path=`./public/${file.name}`;
- await writeFile(path,buffer);
- // console.log(path);
-   quotebgImage=await uploadOnCloudinary(path)
-}
- if(!quotebgImage){
-  throw new error("quotebgImage is not uploaded")
- }
-console.log(quotebgImage);
-  // if(!quotebgImage){
-  //   throw new Error("someting went wrong at image uplaoding")
-  // }
+// // Get file(s)
+// const files = reqBody.getAll('file');
+// // console.log(quote);
+// // console.log(bgColor);
+// // console.log(textCol);
+// let quotebgImage="";
+// console.log(files.length);
+// if(files.length>0){
+//   const file=files[0];
+//   const byteData=await file.arrayBuffer();
+//   const buffer=Buffer.from(byteData);
+//   const path=`./public/${file.name}`;
+//  await writeFile(path,buffer);
+//  // console.log(path);
+//    quotebgImage=await uploadOnCloudinary(path)
+// }
+//  if(!quotebgImage){
+//   throw new error("quotebgImage is not uploaded")
+//  }
+// console.log(quotebgImage);
+//   // if(!quotebgImage){
+//   //   throw new Error("someting went wrong at image uplaoding")
+//   // }
       
-      const quotes=await Quote.create(
-        {
-            title:"title",
-            quote,
-            catagory,
-            BgImageUrl:quotebgImage?.url || "",
-            BgColor:bgColor,
-            TextColor:textCol,
-            Owner:UserId
-        }
-    )
-    if(!quote){
-      throw new error("someting went to Quote generate")
-     }
+//       const quotes=await Quote.create(
+//         {
+//             title:"title",
+//             quote,
+//             catagory,
+//             BgImageUrl:quotebgImage?.url || "",
+//             BgColor:bgColor,
+//             TextColor:textCol,
+//             Owner:UserId
+//         }
+//     )
+//     if(!quote){
+//       throw new error("someting went to Quote generate")
+//      }
     return NextResponse.json({
-        quotes,
+        //quotes,
         message:"Post Created Successfully"
     })
 }

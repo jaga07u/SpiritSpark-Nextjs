@@ -79,7 +79,6 @@ function Page() {
   const BgRemove=()=>{
     setImage("");
   }
-
   return (
     <div className="w-screen h-[100vh] text-white overflow-x-hidden" style={{backgroundImage:'url("https://geniebook.com/cms/storage/app/media/pri.-science-blog/adobestock-301377172.webp")',backgroundRepeat:"no-repeat",backgroundPosition:"center",backgroundSize:"cover"}}>
       <div className="w-full h-[60px] flex justify-between items-center">
