@@ -23,7 +23,6 @@ export async function POST(request){
 const bgColor = reqBody.get('bgColor');
 const textCol = reqBody.get('TextCol');
 const catagory=reqBody.get('catagory');
-
 // // Get file(s)
 const files = reqBody.getAll('file');
 const file=files[0];
