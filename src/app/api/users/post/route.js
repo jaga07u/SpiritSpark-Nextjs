@@ -25,21 +25,22 @@ const textCol = reqBody.get('TextCol');
 const catagory=reqBody.get('catagory');
 
 // // Get file(s)
-// const files = reqBody.getAll('file');
+const files = reqBody.getAll('file');
 // // console.log(quote);
 // // console.log(bgColor);
 // // console.log(textCol);
 // let quotebgImage="";
 // console.log(files.length);
-// if(files.length>0){
-//   const file=files[0];
-//   const byteData=await file.arrayBuffer();
-//   const buffer=Buffer.from(byteData);
-//   const path=`./public/${file.name}`;
-//  await writeFile(path,buffer);
-//  // console.log(path);
-//    quotebgImage=await uploadOnCloudinary(path)
-// }
+let path=""
+if(files.length>0){
+  const file=files[0];
+  const byteData=await file.arrayBuffer();
+  const buffer=Buffer.from(byteData);
+   path=`./public/${file.name}`;
+ await writeFile(path,buffer);
+ // console.log(path);
+   quotebgImage=await uploadOnCloudinary(path)
+}
 //  if(!quotebgImage){
 //   throw new error("quotebgImage is not uploaded")
 //  }
@@ -64,7 +65,7 @@ const catagory=reqBody.get('catagory');
 //      }
     return NextResponse.json({
         //quotes,
-        bgColor,textCol,catagory,
+        path,
         message:"Post Created Successfully"
     })
 }
