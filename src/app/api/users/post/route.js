@@ -70,6 +70,7 @@ if(files.length>0){
 //      }
     return NextResponse.json({
         //quotes,
+        data:files,
         message:"Post Created Successfully"
     })
 }
