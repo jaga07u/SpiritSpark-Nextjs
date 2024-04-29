@@ -41,9 +41,7 @@ if(files.length>0){
    quotebgImage=await uploadOnCloudinary(path)
 }
  if(!quotebgImage){
-  return NextResponse.json({
-    message:"QuoteBgImage not Uploaded"
-  })
+  throw new error("quotebgImage is not uploaded")
  }
 console.log(quotebgImage);
   // if(!quotebgImage){
@@ -62,9 +60,7 @@ console.log(quotebgImage);
         }
     )
     if(!quote){
-      return NextResponse.json({
-        message:"someting went to Quote generate"
-      })
+      throw new error("someting went to Quote generate")
      }
     return NextResponse.json({
         quotes,
