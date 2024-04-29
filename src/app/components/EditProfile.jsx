@@ -44,7 +44,7 @@ function EditProfile({User,hiidenble}) {
       }
     }
    try {
-     const res=await axios.patch("/api/users/login",formData);
+     const res=await axios.patch("api/users/login",formData);
      console.log(res.data);
      toast.success("profile Update Successfully");
      window.location.reload();
