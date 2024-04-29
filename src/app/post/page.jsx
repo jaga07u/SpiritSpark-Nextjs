@@ -39,7 +39,7 @@ function Page() {
   const handleImageChange = (e) => {
     e.preventDefault();
     if (e.target.files.length > 0) {
-      setImagefile(e.target.files[0]);
+      setImagefile(e.target.files);
       const imageUrl = URL.createObjectURL(e.target.files[0]);
       setImage(imageUrl);
       console.log(imageUrl);
