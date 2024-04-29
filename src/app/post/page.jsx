@@ -43,7 +43,7 @@ function Page() {
       const imageUrl = URL.createObjectURL(e.target.files[0]);
       setImage(imageUrl);
       console.log(imageUrl);
-      console.log(imagefile);
+     
     }
   };
   const QuoteSubmit = async (data) => {
@@ -54,6 +54,7 @@ function Page() {
     formData.append('quote', quote);
     formData.append('catagory', catagory);
     // Append file data to FormData
+    console.log(imagefile);
     formData.append('file',imagefile);
     // if (imagefile) {
     //   for (let i = 0; i < imagefile.length; i++) {
@@ -68,7 +69,7 @@ function Page() {
     formData.append('TextCol', TextCol);
   
     try {
-      console.log(formData);
+     // console.log(formData);
       const res = await axios.post("/api/users/post", formData);
       const response = res.data;
       console.log(response);
