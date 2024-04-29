@@ -16,10 +16,10 @@ export async function POST(request){
       const decodeUser=jwt.verify(token?.value,process.env.TOKEN_SECRET);
       const UserId=decodeUser._id;
       const reqBody=await request.formData();
-      const {quote,bgColor,TextCol}=reqBody;
-      console.log(reqBody);
+      // const {quote,bgColor,TextCol}=reqBody;
+      // console.log(reqBody);
 //       //console.log(file);
-//       const quote = reqBody.get('quote');
+      const quote = reqBody.get('quote');
 // const bgColor = reqBody.get('bgColor');
 // const textCol = reqBody.get('TextCol');
 // const catagory=reqBody.get('catagory');
