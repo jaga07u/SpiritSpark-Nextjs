@@ -73,7 +73,7 @@ function Page() {
       router.push("/");
 
     } catch (error) {
-      console.log("Something went Wrong");
+      console.log("Something went Wrong",error);
     }
   };
   const BgRemove=()=>{
