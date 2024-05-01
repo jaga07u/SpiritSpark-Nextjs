@@ -20,13 +20,17 @@ function EditProfile({User,hiidenble}) {
   }
   const handleImageChange = (e) => {
     e.preventDefault();
-    if (e.target.files.length > 0) {
-      setAvatarfile(e.target.files);
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setAvatarURL(imageUrl);
-      setUserAvatar(imageUrl);
-     // console.log(imageUrl);
-    }
+    const file = e.target.files?.[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+           setAvatarfile(reader.result);
+        }
+        const imageUrl = URL.createObjectURL(e.target.files[0]);
+        setAvatarURL(imageUrl);
+        console.log(avatarURL);
+      }
   };
   const DeleteAvtartar=()=>{
     setUserAvatar("");
@@ -38,11 +42,7 @@ function EditProfile({User,hiidenble}) {
     formData.append('username', username);
     formData.append('fullname',  fullname);
     // Append file data to FormData
-    if (avatarfile) {
-      for (let i = 0; i < avatarfile.length; i++) {
-        formData.append('file', avatarfile[i]);
-      }
-    }
+    formData.append('file',avatarfile);
    try {
      const res=await axios.patch("/api/users/login",formData);
      console.log(res.data);

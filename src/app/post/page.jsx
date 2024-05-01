@@ -38,13 +38,20 @@ function Page() {
 
   const handleImageChange = (e) => {
     e.preventDefault();
-    if (e.target.files.length > 0) {
-      setImagefile(e.target.files);
-      const imageUrl = URL.createObjectURL(e.target.files[0]);
-      setImage(imageUrl);
-      console.log(imageUrl);
+    // if (e.target.files.length > 0) {
+    //   setImagefile(e.target.files);
      
-    }
+    const file = e.target.files?.[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+           setImagefile(reader.result );
+        }
+        const imageUrl = URL.createObjectURL(e.target.files[0]);
+        setImage(imageUrl);
+        console.log(imageUrl);
+      }
   };
   const QuoteSubmit = async (data) => {
     const { quote, catagory } = data;
@@ -54,7 +61,6 @@ function Page() {
     formData.append('quote', quote);
     formData.append('catagory', catagory);
     // Append file data to FormData
-    console.log(imagefile);
     formData.append('file',imagefile);
     // if (imagefile) {
     //   for (let i = 0; i < imagefile.length; i++) {
@@ -70,7 +76,8 @@ function Page() {
   
     try {
      // console.log(formData);
-      const res = await axios.post("/api/users/post", formData);
+     console.log(imagefile);
+      const res = await axios.post("/api/users/post", formData,);
       const response = res.data;
       console.log(response);
       toast.success("Your post Uploaded Successfully")

@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { uploadOnCloudinary } from "@/helper/CloudinaryEnv";
 import {writeFile} from "fs/promises"
+import { ImageKitUpload } from "@/helper/ImageKitUploader";
+
 
 connect();
 const generateAccessAndRefresToken=async(id)=>{
@@ -72,20 +74,22 @@ export async function PATCH(request){
   const userID=reqBody.get("ID");
    const username=reqBody.get("username");
    const fullname=reqBody.get("fullname");
-   const files = reqBody.getAll('file');
+   const file = reqBody.get('file');
    let AvtarImage="";
-console.log(files.length);
-if(files.length>0){
-  const file=files[0];
-  const byteData=await file.arrayBuffer();
-  const buffer=Buffer.from(byteData);
-  const path=`./public/${file.name}`;
- await writeFile(path,buffer);
- // console.log(path);
-   AvtarImage=await uploadOnCloudinary(path)
+if (file) {
+  try {
+    // Upload the file
+    const uploadResult = await ImageKitUpload(file);
+    // If upload is successful, set quotebgImage
+    AvtarImage = uploadResult.url;
+    // If upload is successful, set quotebgImage
+  } catch (error) {
+    console.error(error);
+    // Handle error
+  }
 }
 console.log(AvtarImage);
-  const newData={username,fullname,avatarImg:AvtarImage?.url}
+  const newData={username,fullname,avatarImg:AvtarImage}
    const UpdateUser=await User.findByIdAndUpdate(
       userID,
       newData,{

@@ -6,9 +6,12 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import mongoose,{Schema} from "mongoose";
 import {writeFile} from "fs/promises"
-import { uploadOnCloudinary } from "@/helper/CloudinaryEnv";
+//import { uploadOnCloudinary } from "@/helper/CloudinaryEnv";
 import { User } from "@/models/user.model";
 import { error } from "console";
+import ImageKit from "imagekit";
+import { v4 as uuid } from "uuid";
+import { ImageKitUpload } from "@/helper/ImageKitUploader";
 connect();
 export async function POST(request){
   const token =cookies().get("Token");
@@ -24,28 +27,27 @@ const bgColor = reqBody.get('bgColor');
 const textCol = reqBody.get('TextCol');
 const catagory=reqBody.get('catagory');
 // // Get file(s)
-const files = reqBody.get('file');
+const file = reqBody.get('file');
+let quotebgImage="";
+if (file) {
+  try {
+    // Upload the file
+    const uploadResult = await ImageKitUpload(file);
+    // If upload is successful, set quotebgImage
+    quotebgImage = uploadResult.url;
+    // If upload is successful, set quotebgImage
+  } catch (error) {
+    console.error(error);
+    // Handle error
+  }
+}
+console.log(quotebgImage);
+//console.log(quotebgImage);
 //const file=files[0];
 // // console.log(quote);
 // // console.log(bgColor);
 // // console.log(textCol);
- let quotebgImage="";
-// console.log(files.length);
-// if(files.length>0){
-//   const file=files[0];
-//   if(!file){
-//     throw new error("file is not found");
-//   }
-//   const byteData=await file.arrayBuffer();
-//   const buffer=Buffer.from(byteData);
-//    const path=`./public/${file.name}`;
-//    if(!path){
-//     throw new error("path is not found");
-//    }
-//  await writeFile(path,buffer);
-//  console.log(path);
-//   quotebgImage=await uploadOnCloudinary(path)
-// }
+
 //  if(!quotebgImage){
 //   throw new error("quotebgImage is not uploaded")
 //  }
@@ -53,18 +55,18 @@ const files = reqBody.get('file');
 //   // if(!quotebgImage){
 //   //   throw new Error("someting went wrong at image uplaoding")
 //   // }
-      
-      const quotes=await Quote.create(
-        {
-            title:"title",
-            quote,
-            catagory,
-            BgImageUrl:quotebgImage?.url || "",
-            BgColor:bgColor,
-            TextColor:textCol,
-            Owner:UserId
-        }
-    )
+const quotes=await Quote.create(
+  {
+      title:"title",
+      quote,
+      catagory,
+      BgImageUrl:quotebgImage || "",
+      BgColor:bgColor,
+      TextColor:textCol,
+      Owner:UserId
+  }
+)
+     
 //     if(!quote){
 //       throw new error("someting went to Quote generate")
 //      }

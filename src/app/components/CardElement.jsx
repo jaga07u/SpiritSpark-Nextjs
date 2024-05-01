@@ -112,7 +112,16 @@ function CardElement({hiddenble,User}) {
         <div className="w-full h-[60px] bg-transparent  bg-opacity-35 backdrop-blur-lg  flex justify-between items-center z-50">
           <div className="flex justify-center items-center gap-2">
             {User?.avatarImg  ? (
-             <Avatar AvatarUrl={User?.avatarImg } width={10} />
+            <div className="avatar">
+            <div className={`w-10 rounded-full`}>
+            <Image 
+              width={60}
+              height={60}
+              src={`${User?.avatarImg}`}
+              alt="AirMax Pro"
+              />
+            </div>
+          </div>
             ) : (
               <CgProfile
                 style={{ width: "50px", height: "50px" }}
