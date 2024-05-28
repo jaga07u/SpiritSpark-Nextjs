@@ -117,7 +117,7 @@ function Cards({ Data,User }) {
               width={300}
               height={400}
               src={`${Data?.BgImageUrl}`}
-              alt="AirMax Pro"
+              alt="image not found"
               className="z-0 h-full w-full object-cover my-[0px]"
             />
           )}

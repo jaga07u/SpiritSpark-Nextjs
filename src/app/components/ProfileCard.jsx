@@ -16,7 +16,7 @@ function ProfileCard({Data,showFun}) {
         <div
         onClick={()=>{showFun();setCardDetails(Data)}}
           style={{ backgroundColor:`${Data?.BgColor}`, color: `${Data?.TextColor}`,backgroundImage:`url(${Data?.BgImageUrl})`,backgroundPosition:"center",backgroundRepeat:"no-repeat",backgroundSize:"cover"}}
-          className="h-[105px] w-[105px] shadow-md text-center flex justify-center items-center"
+          className="h-[128px] w-[128px] shadow-md text-center flex justify-center items-center"
         >
          <h1  style={{fontSize:"10px"}}>{Data?.quote}</h1>
             {/* <div className="w-full h-[50px]  mx-[-10px] flex justify-between items-center top-3">
