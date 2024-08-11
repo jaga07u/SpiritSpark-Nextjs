@@ -5,10 +5,10 @@ function Avatar({AvatarUrl,width,margin,changefun}) {
     return (
         <>
 <div className="avatar" onClick={changefun}>
-  <div className={`w-20 rounded-full`}>
+  <div className={`w-16 rounded-full`}>
   <Image 
-    width={60}
-    height={60}
+    width={40}
+    height={40}
     src={`${AvatarUrl}`}
     alt="AirMax Pro"
     />

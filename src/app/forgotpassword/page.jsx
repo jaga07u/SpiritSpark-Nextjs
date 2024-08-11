@@ -10,12 +10,10 @@ import axios from 'axios'
 import {useForm,SubmitHandler } from "react-hook-form"
 import {toast} from "react-hot-toast"
 import Cookie from "js-cookie"
-import useStore from "../zustandStore/store"
 
 export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
-  
     // const [user,setUser]=useState({
     //   email:"",
     //   password:""
@@ -23,15 +21,15 @@ export default function page() {
     const [error,setError]=useState(false);
     const login=async(data)=>{
      // console.log(data);
+     if(data.password != data.confirmPassword){
+        toast.error("password and confirm password must be same");
+        return ;
+     }
       try {
-        const res=await axios.post("http://localhost:4000/api/v1/user/signin",data,{withCredentials:true});
-          toast.success("Logged In Successfull");
+        const res=await axios.patch("http://localhost:4000/api/v1/user/forgotpassword",data,{withCredentials:true});
           console.log(res.data);
-          console.log(res.data.data.data.Token);
-          Cookie.set('accessToken',res.data.data.data.Token,{path:'/',expires:7})
-
-          localStorage.setItem("user",JSON.stringify(res.data.data.data));
-           route.push('/');
+          toast.success("Password Changed successfully");
+           route.push('/login');
       } catch (error) {
         console.log("invalid credentials",error);
         setError(true);
@@ -51,19 +49,19 @@ export default function page() {
     />
           </div>
           <h2 className="text-center text-2xl font-bold leading-tight text-black">
-            Sign in to your account
+            Forgot Password
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 ">
-            Don&apos;t have an account?{' '}
+            Don&apos;t want to change password{' '}
             <Link
-              href="/signup"
+              href="/login"
               title=""
               className="font-semibold text-black transition-all duration-200 hover:underline"
             >
-              Create a free account
+             signin
             </Link>
           </p>
-          {error && <h1 className="text-red-600 font-bold text-center text-3xl">Invalid Credentials</h1>}
+        
           <form onSubmit={handleSubmit(login)} className="mt-8">
             <div className="space-y-5">
               <div>
@@ -90,10 +88,10 @@ export default function page() {
                     {' '}
                     Password{' '}
                   </label>
-                  <a href="/forgotpassword" title="" className="text-sm font-semibold text-black hover:underline">
+                  {/* <a href="#" title="" className="text-sm font-semibold text-black hover:underline">
                     {' '}
                     Forgot password?{' '}
-                  </a>
+                  </a> */}
                 </div>
                 <div className="mt-2">
                   <input
@@ -107,13 +105,35 @@ export default function page() {
                   ></input>
                   {errors.password && <span className="text-red-600">Password required</span>}
                 </div>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="" className="text-base font-medium text-gray-900">
+                    {' '}
+                    Confirm Password{' '}
+                  </label>
+                  {/* <a href="#" title="" className="text-sm font-semibold text-black hover:underline">
+                    {' '}
+                    Forgot password?{' '}
+                  </a> */}
+                </div>
+                <div className="mt-2">
+                  <input
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="password"
+                    placeholder="Confirm Password"
+                    {...register("confirmPassword",{required:true
+                   })}
+                    // value={user.password}
+                    // onChange={(e)=>setUser({...user,password:e.target.value})}
+                  ></input>
+                  {errors.password && <span className="text-red-600">Confirm Password required</span>}
+                </div>
               </div>
               <div>
                 <button
                   type="submit"
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                 >
-                  Get started <ArrowRight className="ml-2" size={16} />
+                  Change Password <ArrowRight className="ml-2" size={16} />
                 </button>
               </div>
             </div>

@@ -1,123 +1,278 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client"
-import React, { useState, useEffect,useRef } from "react";
-import axios from "axios";
-import Cards from "./components/Cards";
-import Nav from "./components/Nav";
-import Fnav from "./components/Fnav";
-import EmptyBox from "./components/EmptyBox";
+"use client";
+import React, { useCallback, useEffect, useState} from "react";
+import { FaSearch } from "react-icons/fa";
+import Link from 'next/link';
+import { Input } from '@nextui-org/react';
+import { Avatar } from '@nextui-org/react';
+import Cookie from "js-cookie"
+
+import {
+  Navbar, 
+  NavbarBrand, 
+  NavbarContent, 
+  NavbarItem, 
+} from "@nextui-org/navbar";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
+} from "@nextui-org/dropdown";
+import { Button } from "@nextui-org/react";
+import { SearchIcon } from "./components/SearchIcon";
+import Image from 'next/image';
+import { Moon, Sun } from 'lucide-react';
 import { AppContext } from "./contex/Contex";
-import UserProfile from "./components/UserProfile";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faOm } from '@fortawesome/free-solid-svg-icons';
-import { LocomotiveScrollProvider } from 'react-locomotive-scroll'
+import { FaCirclePlus } from "react-icons/fa6";
+import Home2 from './components/Home2'
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import useStore from "./zustandStore/store.js"
+import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} from "@nextui-org/react";
+import SearchUser from "./components/User"
+import { CgProfile } from "react-icons/cg";
 
 export default function Home() {
-  const [quotes, setQuotes] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [QuoteDetails,setQuoteDetails]=useState(null);
-  const [UserCard,setUserCard]=useState(null);
-  const [scrollDirection, setScrollDirection] = useState(null);
-  const limit = 8;
-
-  const getUser = async () => {
+  const [QuoteDetails, setQuoteDetails] = useState(null);
+  const [UserCard, setUserCard] = useState(null);
+  const [searchedUser,setSearchedUser]=useState([]);
+  const [searchValue,setSearchValue]=useState("");
+ // const [theme,setTheme]=useState("dark");
+ const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
+  const [selectedKeys1, setSelectedKeys1] =useState(new Set(["Hindi"]));
+  const [currentMode,setCurrentMode]=useState("couplet");
+  const [userInfo,setUserInfo]=useState(null);
+  const theme=useStore((state)=>state.theme);
+  const route=useRouter();
+  const postChange=()=>{
+    route.push('/post/')
+  }
+  const changeProfile=()=>{
+    route.push(`/profile/`);
+  }
+  const userString = localStorage.getItem("user");
+  let user;
+  
+  if (userString) {
     try {
-      const res = await axios.get("api/users/login");
-      setUser(res.data.data);
-    } catch (error) {
-      console.error("Error fetching user:", error);
+      user = JSON.parse(userString); // Parse the JSON string to an object
+    } catch (e) {
+      console.error("Error parsing user data from localStorage", e);
     }
-  };
-
-  const getCardData = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(`api/users/post/${limit}/${page}`);
-      const data = res.data.data;
-      setQuotes((prev) => [...prev, ...data]);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
+  }
+  
+  const avatarImg = user ? user.avatarImg : null;
+  const email=user?user.email:null;
+  const fullname=user?user.fullname:null;
+  useEffect(()=>{
+    searchUser();
+  },[searchValue])
+  const searchUser=async()=>{
+    if(searchValue.length>0){
+    const res=await axios.get(`http://localhost:4000/api/v1/user/search/${searchValue}`,{withCredentials:true});
+    setSearchedUser(res.data?.data)
+    console.log(res.data.data);
     }
-  };
-
-  useEffect(() => {
-    getUser();
-    getCardData();
-  }, [page]);
-
-  const handleInfiniteScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.scrollHeight
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleInfiniteScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleInfiniteScroll);
-    };
-  }, []);
-
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
-    setScrollDirection(currentScrollY > lastScrollY ? "down" : "up");
-    setLastScrollY(currentScrollY);
-  };
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+  }
+  console.log(user);
+  
+  const logout=async()=>{
+   const res =await axios.delete("http://localhost:4000/api/v1/user/signout",{withCredentials:true});
+   console.log(res.data);
+    Cookie.remove('accessToken');
+    localStorage.removeItem("user");
+    route.push('/login');
+  }
+  const selectedValue = React.useMemo(
+    () =>Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+  const selectedValue1 = React.useMemo(
+    () =>Array.from(selectedKeys1).join(", ").replaceAll("_", " "),
+    [selectedKeys1]
+  );
+  const [isRotating, setIsRotating] = useState(false);
+  const ThemeSet = useStore((state) => state.ThemeChange)
   return (
-    <LocomotiveScrollProvider
-  options={
-    {
-      smooth: true,
-      // ... all available Locomotive Scroll instance options 
-    }
-  }
-  watch={
-    [
-      //..all the dependencies you want to watch to update the scroll.
-      //  Basicaly, you would want to watch page/location changes
-      //  For exemple, on Next.js you would want to watch properties like `router.asPath` (you may want to add more criterias if the instance should be update on locations with query parameters)
-    ]
-  }
-  containerRef={containerRef}
->
-    <AppContext.Provider value={{ QuoteDetails, setQuoteDetails, UserCard, setUserCard }}>
-      <div ref={containerRef} data-scroll-container className="w-[100vw] h-[100vh]">
-       <Nav />  {/* Show Nav only if isNavVisible is true */}
-        {quotes.length > 0 ? (
-          <div className="w-full min-h-full flex flex-col justify-center items-center gap-5 my-[20px] bg-white">
-            {quotes.map((item) => (
-              <Cards key={item._id} Data={item} User={user} />
-            ))}
-            {loading && (
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 flex justify-center items-center">
-                <FontAwesomeIcon icon={faOm} style={{ width: "50px", height: "50px", color: "blue" }} />
-              </div>
-            )}
-          </div>
-        ) : (
-          <EmptyBox />
-        )}
-        <Fnav UserDetails={user} />
+      <AppContext.Provider
+        value={{ QuoteDetails, setQuoteDetails, UserCard, setUserCard,currentMode,setCurrentMode,theme}}
+      >
+        <div
+          style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
+           className={`w-full min-h-screen ${theme=="dark"?"dark text-foreground ":""}`}
+        >
+           <div>
+        <Navbar shouldHideOnScroll
+        style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
+        className="flex justify-between items-center"
+        >
+      <NavbarContent justify="end">
+        <NavbarBrand className="mr-2">
+          <Image src={"/LOGO2-removebg-preview.png"} width={50} height={50}/>
+          <p className="hidden sm:block font-bold text-inherit mx-2">SPIRITSPARK</p>
+        </NavbarBrand>
+        <NavbarContent className="hidden sm:flex gap-3">
+          <NavbarItem>
+            <Link color="foreground" href="#">
+              Features
+            </Link>
+          </NavbarItem>
+          <NavbarItem isActive>
+            <Link href="#" aria-current="page" color="secondary">
+              Customers
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="#">
+              Integrations
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+      </NavbarContent>
+      <div className={`w-[30px] h-[30px] rounded-full flex justify-center items-center cursor-pointer`}
+      onClick={ThemeSet}
+      >
+         {
+          theme == "dark"?<Moon
+          className={` ${isRotating ? 'animate-rotate' : ''}`}/>:<Sun  className={` ${isRotating ? 'animate-rotate' : ''}`}/>
+         }
       </div>
-    </AppContext.Provider>
-    </LocomotiveScrollProvider>
+      <NavbarContent as="div" className=" flex justify-between items-center " justify="center">
+        <FaSearch
+         onClick={onOpen}
+        className="md:hidden text-2xl mx-2"/>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+          <div className="w-full h-[500px]  bg-gray-300 flex justify-center items-center flex-col gap-7">
+              <div className="w-[80%] h-[60px] py-7">
+                <input type="text" className="w-full h-[50px] rounded-md p-2"
+                 onChange={(e) => setSearchValue(e.target.value)} 
+                placeholder="Search here..."/>
+              </div>
+              <div className="w-[80%] h-[420px]   overflow-scroll flex flex-col">
+                   {
+                    searchedUser?.map((items)=>(
+                      <>
+                      <SearchUser data={items}/>
+                      </>
+                    ))
+                   }
+              </div>
+          </div>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+        <Input
+          classNames={{
+            base: "max-w-full sm:max-w-[10rem] h-10 hidden md:block",
+            mainWrapper: "h-full",
+            input: "text-small",
+            inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+          }}
+          placeholder="Type to search..."
+          size="sm"
+          startContent={<SearchIcon size={18} />}
+          type="search"
+        />
+        <Dropdown placement="bottom-end">
+          <DropdownTrigger>
+          <Avatar
+              isBordered
+              as="button"
+              className="transition-transform"
+              color="secondary"
+              name="Jason Hughes"
+              size="sm"
+              src={`${avatarImg || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyKpQUy8JP90MAZxFjU0P9bPqkUWL35fd8Ag&s"}`}
+          />
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold">{fullname}</p>
+              <p className="font-semibold">{email}</p>
+            </DropdownItem>
+            <DropdownItem 
+            key="profile"
+            onClick={changeProfile}
+            >My Profile</DropdownItem>
+            <DropdownItem 
+            onClick={logout}
+            key="logout" color="danger">
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </NavbarContent>
+   
+    </Navbar>
+    <Home2 Mode={selectedKeys.currentKey || "couplet"} lang={selectedKeys1.currentKey || "Hindi"}/>
+    </div> 
+    <footer>
+          <div
+           style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
+        className={`fixed bottom-0 h-[50px] left-0 w-full  ${theme=="dark"?"bg-black":"bg-white"}  flex justify-center gap-[90px] items-center`}
+      >
+         <Dropdown>
+      <DropdownTrigger>
+        <Button 
+          variant="bordered" 
+          className="capitalize"
+        >
+          {selectedValue1}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu 
+        aria-label="Multiple selection example"
+        variant="flat"
+        closeOnSelect={false}
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedKeys1}
+        onSelectionChange={setSelectedKeys1}
+      >
+         <DropdownItem key="Hindi">Hindi</DropdownItem>
+        <DropdownItem key="English">English  <span className="text-success">Upcoming</span></DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+        <div>
+          <FaCirclePlus
+            style={{ width: "35px", height: "35px"}}
+            onClick={postChange}
+          />
+        </div>
+        <Dropdown>
+      <DropdownTrigger>
+        <Button 
+          variant="bordered" 
+          className="capitalize"
+        >
+          {selectedValue}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu 
+        aria-label="Multiple selection example"
+        variant="flat"
+        closeOnSelect={false}
+        disallowEmptySelection
+        selectionMode="single"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+      >
+         <DropdownItem key="quote">Quote</DropdownItem>
+        <DropdownItem key="couplet">Couplet(doha)</DropdownItem>
+        <DropdownItem key="poem">Poem</DropdownItem>
+        <DropdownItem key="story">Story</DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+      </div>
+      </footer>
+        </div>
+      </AppContext.Provider>
+    // </LocomotiveScrollProvider>
   );
 }

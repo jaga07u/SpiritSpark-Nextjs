@@ -1,159 +1,191 @@
 "use client"
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
+import 'dotenv/config'
 import { useRouter } from 'next/navigation';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { TbPhotoPlus } from 'react-icons/tb';
-
+import useApp from '../contex/Contex';
+import { GoogleGenerativeAI } from "@google/generative-ai"; // Ensure library is installed
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import PostOpt from '../components/PostOpt';
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast";
+import { TbPhotoFilled } from "react-icons/tb";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
+} from "@nextui-org/dropdown";
+import { Button } from '@nextui-org/react';
+import {Text_detection} from "../Generative_AI/Text_detection"
+import Cookie from "js-cookie"
+
 
 function Page() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [image, setImage] = useState("");
-  const [imagefile,setImagefile]=useState(null);
-  const [color,setColor]=useState("");
-  const [TextCol,setTextCol]=useState("black");
-  const [Hidden,setHidden]=useState("hidden");
-  const [user,setUser]=useState(null);
-  const [error,setError]=useState(false);
+  const [imagefile, setImagefile] = useState(null);
+  const [color, setColor] = useState("");
+  const [TextCol, setTextCol] = useState("black");
+  const [Hidden, setHidden] = useState("hidden");
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
+  const [content,setContent]=useState("");
   const router = useRouter();
-  const ChangeHiddent=()=>{
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+ // const router=useRouter();
+  const genAI = new GoogleGenerativeAI("AIzaSyBucoxS0xDzS-N5f75gYHUfcT0isPb7T68"); // Replace with your actual key
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // Double-check model compatibility
+  const prompt = "if the given picture has any romance or adult content then respond only yes otherwise respond no. don't give any fullstop";
+
+  const ChangeHiddent = () => {
     setHidden("block");
   }
+
   const Back = () => {
     router.push('/');
   };
-  const getUser=async()=>{
-    const res=await axios.get("api/users/login");
-    // console.log(res.data.data);
-    setUser(res.data.data);
-  }
-   useEffect(()=>{
-    getUser();
-   },[]);
+  const ContentGenerate = async () => {
+    if(!selectedKeys.currentKey){
+      toast.error("please select Mode");
+      return ;
+    }
+    const prompt1=`one motivation ${selectedKeys.currentKey == "couplet"?"kabir dash dohe with out title":selectedKeys.currentKey} ${selectedKeys.currentKey == "story" ||selectedKeys.currentKey == "poem"?"in 70 words only in hindi no translate":"only in hindi no translate"}`
+    setContent("");
+  //  setIsLoading(true);
+    try {
+      const result = await model.generateContentStream(prompt1);
+      for await (const item of result.stream) {
+        setContent((prev) => `${prev}${item.candidates[0].content.parts[0].text}`);
+      }
+    } catch (error) {
+      console.log(error);
+    } 
+    // finally {
+    //   setIsLoading(false);
+    // }
+  };
 
+  const img_detect = () => {
+    return new Promise((resolve, reject) => {
+      if (!imagefile) {
+        console.error("Please upload an image!");
+        reject("Please upload an image!");
+        return;
+      }
+  
+      try {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const base64String = reader.result.split(',')[1]; // Get base64 string from the result
+          const image = {
+            inlineData: {
+              data: base64String,
+              mimeType: imagefile.type
+            }
+          };
+          try {
+            const result = await model.generateContent([prompt, image]);
+            resolve(result.response.text().trim());
+          } catch (error) {
+            toast.error("Sorry you can't upload this type of content");
+            // console.error("Error generating content:", error);
+            reject("yes");
+          }
+        };
+        reader.readAsDataURL(imagefile); // Read the image file as a data URL
+      } catch (error) {
+        console.error("Error processing image:", error);
+        reject(error);
+      }
+    });
+  }
+  
   const handleImageChange = (e) => {
     e.preventDefault();
-    // if (e.target.files.length > 0) {
-    //   setImagefile(e.target.files);
-     
     const file = e.target.files?.[0];
     if (file) {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-           setImagefile(reader.result );
-        }
-        const imageUrl = URL.createObjectURL(e.target.files[0]);
-        setImage(imageUrl);
-        console.log(imageUrl);
-      }
-  };
-  const QuoteSubmit = async (data) => {
-    const { quote, catagory } = data;
-    // Create a new FormData object
-    const formData = new FormData();
-    // Append form fields to FormData
-    formData.append('quote', quote);
-    formData.append('catagory', catagory);
-    // Append file data to FormData
-    formData.append('file',imagefile);
-    // if (imagefile) {
-    //   for (let i = 0; i < imagefile.length; i++) {
-    //     formData.append('file', imagefile[i]);
-    //   }
-    // }
-    if(!color.length>0){
-       setError(true);
-       return;
+      setImagefile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      console.log(imageUrl);
     }
-    formData.append('bgColor', color);
+  };
+  
+  const QuoteSubmit = async () => {
+    console.log(content);
+  
+    if (!(image.length > 0)) {
+      toast.error("Please select an image");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append(`${selectedKeys.currentKey}`, content);
+    formData.append('bgImg', imagefile);
     formData.append('TextCol', TextCol);
   
     try {
-     // console.log(formData);
-     console.log(imagefile);
-      const res = await axios.post("/api/users/post", formData,);
-      const response = res.data;
-      console.log(response);
-      toast.success("Your post Uploaded Successfully")
-      router.push("/");
-
+      const imageResult = await img_detect();
+      console.log(imageResult);
+  
+      const textResult = await Text_detection(content);
+      console.log(textResult);
+  
+      if (imageResult?.toLocaleLowerCase() === "yes" || textResult?.toLocaleLowerCase() === "yes") {
+        console.log("yes");
+        toast.error("Sorry, you can't upload this type of content");
+        await axios.delete("http://localhost:4000/api/v1/user/signout", { withCredentials: true });
+        Cookie.remove('accessToken');
+        router.push('/login');
+        return;
+      }
+  
+      const res = await axios.post(`http://localhost:4000/api/v1/post/${selectedKeys.currentKey}`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(res.data);
+   router.push('/');
+      // Continue with the submission logic if necessary
     } catch (error) {
-      console.log("Something went Wrong",error);
+      console.error("Error detecting image content:", error);
+      toast.error("An error occurred while submitting the quote. Please try again.");
     }
   };
-  const BgRemove=()=>{
-    setImage("");
-  }
+  
+  
   return (
-    <div className="w-screen h-[100vh] text-white overflow-x-hidden" style={{backgroundImage:'url("https://geniebook.com/cms/storage/app/media/pri.-science-blog/adobestock-301377172.webp")',backgroundRepeat:"no-repeat",backgroundPosition:"center",backgroundSize:"cover"}}>
+    <div className="w-screen h-[100vh] text-white overflow-x-hidden" style={{backgroundImage:'url("https://png.pngtree.com/thumb_back/fh260/background/20190925/pngtree-cool-decoration-abstract-light-dark-blue-futuristic-background-design-creative-dynamic-image_315241.jpg")',backgroundRepeat:"no-repeat",backgroundPosition:"center",backgroundSize:"cover"}}>
       <div className="w-full h-[60px] flex justify-between items-center">
-      <button onClick={Back}><IoMdArrowRoundBack style={{ width: "50px", height: "50px", marginTop: "0px",color:"whitesmoke" }} /></button>
-      <button type="button" onClick={handleSubmit(QuoteSubmit)} className="w-[90px] h-[40px] relative right-3  shadow-2xl border-2 border-white backdrop-blur-lg rounded-lg bg-opacity-55  text-xl font-bold">Post</button>
+        <button onClick={Back}><IoMdArrowRoundBack style={{ width: "50px", height: "50px", marginTop: "0px",color:"whitesmoke" }} /></button>
+        <button type="button" 
+        onClick={handleSubmit(QuoteSubmit)} 
+        className="w-[90px] h-[40px] relative right-3  shadow-2xl border-2 border-white backdrop-blur-lg rounded-lg bg-opacity-55  text-xl font-bold">Post</button>
       </div>
       <hr />
       <div className="w-full h-[50px] flex justify-center my-4 items-center  text-white text-center text-xl font-bold underline ">
-           <h1>🌸जीवन सिर्फ जियो मत दुसरो को भी जीना सिखाओ🌺</h1>
-        </div>
+        <h1>🌸जीवन सिर्फ जियो मत दुसरो को भी जीना सिखाओ🌺</h1>
+      </div>
         
       <form>
-        {/* <div className="w-full h-150 flex justify-center items-center gap-2">
-          <input
-            type="file"
-            onChange={handleImageChange}
-            // {...register("quoteImage")}
-            className="opacity-0 left-[-80px]"
-          />
-          <div>
-            <TbPhotoPlus style={{ width: "80px", height: "80px", marginLeft: "-200px",color:"white" }} />
-            <h1 className="mx-[-200px]">Click for Bg  Image</h1>
-          </div>
-          <h1 className="">Or</h1>
-          <div>
-            <input
-              type="color"
-              onChange={(e)=>setColor(e.target.value)}
-              className="mx-3"
-            />
-            <h1 className="mx-3">Click to <br /> Choose Bg Color</h1>
-          </div>
-        </div> */}
-        {/* <div className="w-full h-[50px] flex justify-center items-center  text-white text-center text-xl font-bold underline ">
-           <h1>🌸जीवन सिर्फ जियो मत दुसरो को भी जीना सिखाओ🌺</h1>
-        </div> */}
-        {/* <div className="w-[200px] h-[70px]  flex justify-center items-center">
-          <h1>Catagroy:</h1>
-          <select name="catagory" id="" className="w-[100px] h-[30px] bg-transparent backdrop-blur-lg rounded-lg bg-opacity-55 border border-3">
-         <option value="Spiritual">Spiritual</option>
-         <option value="Spiritual">Business</option>
-         <option value="Spiritual">Life</option>
-         <option value="Spiritual">Motivational</option>
-
-          </select>
-        </div> */}
         <div className="w-[100%] h-[80%]">
-          <div className=" my-3 w-full h-[60px]   backdrop-blur  flex justify-between items-center p-2">
-            <div className="flex justify-center items-center">
-        <CgProfile className="z-50" style={{ width: "50px", height: "50px",marginLeft:"0px" }}/>
-        <h1>{user?.username}</h1>
-        </div>
-        <BsThreeDotsVertical style={{width:"30px",height:"30px"}} onClick={ChangeHiddent} />
-        {/* <div className={`${Hidden}`} >
-        <PostOpt BgChange={BgRemove} />
-        </div> */}
-        {/*  */}
-        </div>
-        <textarea
-        placeholder="Enter your quote"
-          className={`w-[92%] h-[400px] mx-4 my-1 text-3xl text-center bg-white bg-opacity-35 backdrop-blur-sm  outline-none  p-4 resize-none shadow-xl border-none rounded-md`}
+          <textarea
+          value={content}
+          onChange={(e)=>setContent(e.target.value)}
+          placeholder="Enter your Beautifull Words 🕉"
+          className={`w-[100%] h-[400px] text-3xl text-center bg-white bg-opacity-35 backdrop-blur-sm outline-none p-4 resize-none shadow-xl border-none`}
           style={{
             backgroundImage: image ? `url(${image})` : 'none',
-            backgroundColor:`${color}`,
             color:`${TextCol}`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -162,83 +194,61 @@ function Page() {
             whiteSpace: "pre-wrap",
             wordWrap: "break-word"
           }}
-          {...register("quote", { required: true, maxLength: 150, minLength: 20 })}
-        />
-        {errors.quote && <span className="text-red-700 text-xl mx-4  relative top-[-40px]">MaxLength 150 and Min Length 20</span>}
-        </div>
-        <div className="w-full h-[50vh] bg-transparent">
-           <div className="w-full h-[50px] border-b-black flex justify-around items-center flex-col bg-transparent">
-            <div className="flex my-[-20px]">
-           <h1>Catagory:</h1>
-          <select
-          {...register("catagory",{required:true})}
-          name="catagory" id="" className="w-[150px] h-[30px] bg-transparent backdrop-blur-lg rounded-lg bg-opacity-55 border border-3">
-            <option value="" className="bg-transparent text-black" >Select Category</option>
-         <option value="Spiritual" className="bg-transparent text-black"  >Spiritual</option>
-         <option value="Spiritual"  className="bg-transparent text-black" >Business</option>
-         <option value="Spiritual"  className="bg-transparent text-black" >Life</option>
-         <option value="Spiritual"  className="bg-transparent text-black" >Motivational</option>
-          </select>
-          </div>
-          {errors.catagory &&  <span className="text-red-700 text-xl relative left-8 ">Catagory required</span> }
-           </div>
-       {/* */}
-        
-       {/*  */}
-           <hr className="w-[85%] mx-8" />
-           <div className="w-full h-[50px] border-b-black flex justify-between items-center">
-          <input
-            type="file"
-            onChange={handleImageChange}
-            // {...register("quoteImage")}
-            className="opacity-0 z-50 "
           />
-          <div className=" w-full flex justify-center items-center">
-            <TbPhotoPlus style={{ width: "50px", height: "50px", marginLeft: "0px",color:"white",position:"relative",left:"-90px" }} />
-            <h1 className="relative left-[-90px]">Click for Bg  Image</h1>
-            </div>
-           </div>
-           <hr className="w-[85%] mx-8"/>
-           <div className="w-full h-[50px] border-b-black flex justify-center items-center ">
-           <input
-              type="color"
-              
-              onChange={(e)=>setColor(e.target.value)}
-              className="mx-3 "
-            />
-            <h1 className="mx-1"> Click for Bg Color</h1>
-           </div>
-           {error && <h1 className="text-red-500 mx-10">Bg Color is required</h1>}
-           <hr  className="w-[85%] mx-8"/>
-           <div className="w-full h-[50px] border-b-black flex justify-center items-center gap-3">
-            <h1></h1>
-           <input
-              type="color"
-              onChange={(e)=>{setTextCol(e.target.value); setError(false) }}
-              className=" relative"
-            />
-            <h1 className="text-white">Click for text color</h1>
-           </div>
-           <hr className="w-[85%] mx-8" />
+          {/* {errors.quote && <span className="text-red-700 text-xl mx-4 relative top-[-40px]">MaxLength 150 and Min Length 20</span>} */}
         </div>
-        {/* <div className="flex justify-between items-center ">
-          <div className="flex">
-        <input
-              type="color"
-              onChange={(e)=>setTextCol(e.target.value)}
-              className="mx-3 relative top-[-30px]"
-            />
-            <h1 className=" relative top-[-30px] text-white">Click for text color</h1>
-            </div>
-            <div className="w-[90px] h-[30px]  relative top-[-30px] left-[-10px] flex justify-center items-center flex-col">
-              <div >
-            <MdDelete style={{width:"30px",height:"30px",color:"orange"}} onClick={BgRemove} />
-            </div>
-            <h1>Delete Bg</h1>
-            </div>
-            </div> */}
-        {/*  */}
       </form>
+      <Button
+      onClick={ContentGenerate}
+      className="w-full h-[40px] bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg text-2xl rounded-lg mb-4">
+      Generate
+    </Button>
+      <div className="w-full h-[80px] flex justify-between items-center p-2">
+        <div className='w-[100px] h-[60px] flex justify-center items-center flex-col'>
+          <TbPhotoFilled style={{width:60,height:60,paddingTop:2,color:"yellow",scale:12.5}} />
+          <input type='file'
+           className="opacity-1 relative  left-[-150px] " 
+           onChange={handleImageChange}
+           />
+           <h1>Image</h1>
+        </div>
+        <div className='w-[100px] h-[60px] flex justify-center items-center flex-col'>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button 
+                variant="bordered" 
+                className="capitalize"
+                style={{color:"white"}}
+              >
+                {selectedValue}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu 
+              aria-label="Multiple selection example"
+              variant="flat"
+              closeOnSelect={false}
+              disallowEmptySelection
+              selectionMode="single"
+              selectedKeys={selectedKeys}
+              onSelectionChange={setSelectedKeys}
+            >
+              <DropdownItem key="quote">Quote</DropdownItem>
+              <DropdownItem key="couplet">Couplet(doha)</DropdownItem>
+              <DropdownItem key="poem">Poem</DropdownItem>
+              <DropdownItem key="story">Story</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          <h1>Mode</h1>
+        </div>
+        <div className='w-[100px] h-[60px] flex justify-center items-center flex-col'>
+          <div className='w-[40px] h-[40px] bg-yellow-400 rounded-full'>
+          <input 
+          onChange={(e)=>setTextCol(e.target.value)}
+          type='color'  style={{width:50,height:30}} className="rounded-full  bg-white opacity-0"/>
+          </div>
+          <h1>TextColor</h1>
+        </div>
+      </div>
     </div>
   );
 }

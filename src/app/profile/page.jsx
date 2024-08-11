@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import React from 'react'
 import { useState,useEffect } from 'react';
@@ -14,89 +15,184 @@ import EditProfile from '../components/EditProfile';
 import EmptyProfile from '../components/EmptyProfile';
 import useApp, { AppContext } from '../contex/Contex';
 import CardElement from '../components/CardElement';
+import { BsThreeDotsVertical } from "react-icons/bs";
+import useStore from "../zustandStore/store";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem
+} from "@nextui-org/dropdown";
+import { Button } from "@nextui-org/react";
 function Page() {
-    const [user,setUser]=useState(null);
-    const [quotes,setQuotes]=useState(null);
+  //  const [user,setUser]=useState(null);
+    const [post,setPost]=useState("couplet");
+    const [posts,setPosts]=useState(null);
+    const [curruser,setCurrUser]=useState(null);
     const [hidden,setHidden]=useState(false);
     const [Cardhidden,setCardHidden]=useState(false);
     const [CardDetails,setCardDetails]=useState(null);
     const router=useRouter();
+    const theme=useStore((state)=>state.theme);
+    const userString = localStorage.getItem("user");
+  let user;
+  
+  if (userString) {
+    try {
+      user = JSON.parse(userString); // Parse the JSON string to an object
+    } catch (e) {
+      console.error("Error parsing user data from localStorage", e);
+    }
+  }
     const back=()=>{
         router.push("/");
     }
+    const cards=[1,2,3,4,5,6,7,8,9];
    const getProfile=async()=>{
-    const res=await axios.get("/api/users/post");
-   // console.log(res.data.UserDetails[0]);
-    setUser(res.data.UserDetails[0]);
-    setQuotes(res.data.quote);
+    const res=await axios.get(`http://localhost:4000/api/v1/users/profile/post/${user?._id}`,{withCredentials:true});
+  console.log(res.data.data);
+     setCurrUser(res.data.data.UserDetails);
+    setPosts(res.data.data.posts);
    }
+ // console.log(posts);
+   console.log(curruser);
+   
+   
    const handleEditProfile = () => {
     setHidden(true);
 }
-const handleshowCard=()=>{
-  setCardHidden(true);
-}
-  // console.log(hidden);
+// const handleshowCard=()=>{
+//   setCardHidden(true);
+// }
+//   // console.log(hidden);
    useEffect(()=>{
        getProfile();
    },[])
 
     return (
         <>
-        <AppContext.Provider value={{CardDetails,setCardDetails}}>
-        {hidden && <EditProfile User={user} hiidenble={setHidden}/> }
-        {Cardhidden && <CardElement hiddenble={setCardHidden} User={user} />  }
-       {quotes?.length ?<div>
-      
-        <div className="w-full h-[50px] bg-gray-100 flex justify-between items-center gap-8">
+        <AppContext.Provider
+        // value={{CardDetails,setCardDetails}}
+         >
+        {hidden && <EditProfile
+        User={user} hiidenble={setHidden}
+         /> }
+        {/* {Cardhidden && <CardElement hiddenble={setCardHidden} User={user} />  } */}
+       {/* {quotes?.length ? */}
+       <div  style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
+        className={`w-full min-h-[100vh] ${theme=="dark"?"dark text-foreground ":""}`}>
+        <div 
+        //  style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
+        className="w-full h-[50px] flex justify-between items-center">
         <button onClick={back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px" }} /></button>
-        <div className="relative left-[-120px] font-bold">{user?.username}</div>
+        {/* <div className="w-[10%] h-full flex justify-center items-center">
+      <Dropdown>
+        <DropdownTrigger>
+          <Button 
+            color="default"
+            variant="light"
+            className="capitalize"
+          >
+            <BsThreeDotsVertical className="text-3xl"/>
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu 
+          aria-label="Dropdown Variants"
+          color="default"
+          variant="light"
+        >
+          <DropdownItem 
+            className={`${posts === "couplet" ? "text-success" : ""}`}
+            onClick={() => setPosts("couplet")}
+            key="new"
+          >
+            couplet
+          </DropdownItem>
+          <DropdownItem
+            className={`${posts === "quote" ? "text-success" : ""}`}
+            onClick={() => setPosts("quote")}
+            key="copy"
+          >
+            quote
+          </DropdownItem>
+          <DropdownItem
+            className={`${posts === "poem" ? "text-success" : ""}`}
+            onClick={() => setPosts("poem")}
+            key="edit"
+          >
+            poem
+          </DropdownItem>
+          <DropdownItem 
+            className={`${posts === "story" ? "text-success" : ""}`}
+            onClick={() => setPosts("story")}
+            key="delete"
+          >
+            story
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </div> */}
         </div>
-        <div className="w-full h-[80px]  bg-gray-100 flex justify-center items-center gap-2">
+        <div className={`w-full h-[80px] flex justify-center items-center gap-2`}>
            <div className="w-[80px] h-full">
             {
-         user?.avatarImg ?
+         user?.avatarImg || curruser?.avatarImg ?
          <>
-        <Avatar AvatarUrl={user?.avatarImg} width={22} />
+        <Avatar AvatarUrl={user?.avatarImg || curruser?.avatarImg} width={22} />
          </>:
          <>
          <CgProfile className="z-50" style={{ width: "50px", height: "50px" }}/>
          </>
             }
-          <h1 className="text-center inline-block font-bold" style={{marginLeft:"-12px",fontSize:"14px"}}> {user?.fullname} </h1>
+          <h1 className="text-center  inline-block font-bold" style={{marginLeft:"5px",fontSize:"14px"}}> 
+            
+            {user?.username} 
+            </h1>
            </div>
            <div className="w-[70px] h-[80px] text-center font-bold">
-            <h1>{quotes?.length}</h1>
-            <h1>Quotes</h1>
+            <h1>
+              {posts?.length}
+              </h1>
+            <h1>Posts</h1>
            </div>
            <div className="w-[70px] h-[80px] text-center font-bold">
-            <h1>{user?.followerCount}</h1>
+            <h1>
+              {curruser?.followerCount}
+              </h1>
             <h1>Follower</h1>
            </div>
            <div className="w-[70px] h-[80px] text-center font-bold">
-            <h1>{user?.followingCount}</h1>
+            <h1>
+              {curruser?.followingCount}
+              </h1>
             <h1>Following</h1>
            </div>
         </div>
-        <div className="w-full h-[60px] bg-gray-100 flex justify-around items-center ">
-        <button 
-        onClick={handleEditProfile}
-        className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg w-[100px] h-[40px] text-lg bg-blue-500">EditProfile</button>
+        <div className="w-full h-[60px]  flex justify-around items-center ">
+      <button 
+       onClick={handleEditProfile}
+        className="btn btn-xs  w-[100px] h-[40px] text-lg bg-blue-500">EditProfile</button>
         </div>
-        <div className="w-full  flex gap-[3px] flex-wrap bg-white ">
+      
+        <div className="w-full min-h-full gap-2 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 justify-items-center items-center my-1 ">
           {
-            quotes?.map((items,index)=>(
+            posts?.map((items,index)=>(
                 <>
-                <ProfileCard key={index} Data={items} showFun={handleshowCard}/>
+                <ProfileCard
+                key={items._id} 
+                Data={items} 
+                User={curruser}
+                // showFun={handleshowCard}
+                />
                 </>
             ))
           }
         </div>
-        </div>:
+        </div>
+        {/* :
         <>
        <EmptyProfile/>
-        </>
-}
+        </> */}
 </AppContext.Provider>
 
         </>

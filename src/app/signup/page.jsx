@@ -46,7 +46,7 @@ function Page() {
         // }
        const submit=async(data)=>{
         try {
-          const res=await axios.post("/api/users/signup",data);
+          const res=await axios.post("http://localhost:4000/api/v1/user/signup",data,);
           console.log(res.data);
           route.push("/login");
         } catch (error) {
@@ -92,7 +92,7 @@ function Page() {
                       type="text"
                       placeholder="Full Name"
                       id="name"
-                      {...register("username",{required:true})}
+                      {...register("username",{required:true,pattern: /^(?=(?:.*\d){2,})[a-zA-Z\d]{1,}$/})}
                     ></input>
                      {errors.username && <span className="text-red-600">This field is required</span>}
                   </div>

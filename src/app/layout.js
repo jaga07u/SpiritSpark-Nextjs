@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-sync-scripts */
-
+// "use client"
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import {Providers} from "./Provider"
 // import { GoogleOAuthProvider} from '@react-oauth/google';
 
 
@@ -27,13 +28,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+   
     <html lang="en">
       <head>
       </head>
-
-      <body className={inter.className}>
+      <body className={` ${inter.className}`}>
+        <Providers>
          <Toaster position="top-center" /> 
-        {children}</body>
+         
+        {children}
+        </Providers>
+        </body>
         
     </html>
   );
