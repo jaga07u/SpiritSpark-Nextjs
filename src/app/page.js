@@ -208,7 +208,6 @@ export default function Home() {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-   
     </Navbar>
     <Home2 Mode={selectedKeys.currentKey || "couplet"} lang={selectedKeys1.currentKey || "Hindi"}/>
     </div> 
