@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Input } from '@nextui-org/react';
 import { Avatar } from '@nextui-org/react';
 import Cookie from "js-cookie"
-
 import {
   Navbar, 
   NavbarBrand, 
@@ -31,19 +30,16 @@ import axios from "axios";
 import useStore from "./zustandStore/store.js"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} from "@nextui-org/react";
 import SearchUser from "./components/User"
-import { CgProfile } from "react-icons/cg";
 
 export default function Home() {
   const [QuoteDetails, setQuoteDetails] = useState(null);
   const [UserCard, setUserCard] = useState(null);
   const [searchedUser,setSearchedUser]=useState([]);
   const [searchValue,setSearchValue]=useState("");
- // const [theme,setTheme]=useState("dark");
  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
   const [selectedKeys1, setSelectedKeys1] =useState(new Set(["Hindi"]));
   const [currentMode,setCurrentMode]=useState("couplet");
-  const [userInfo,setUserInfo]=useState(null);
   const theme=useStore((state)=>state.theme);
   const route=useRouter();
   const postChange=()=>{

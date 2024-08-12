@@ -3,27 +3,14 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation'
-import Image from 'next/image';
 import Avatar from '../components/Avatar';
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import ProfileCard from '../components/ProfileCard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faOm } from '@fortawesome/free-solid-svg-icons'
 import EditProfile from '../components/EditProfile';
-import EmptyProfile from '../components/EmptyProfile';
 import useApp, { AppContext } from '../contex/Contex';
-import CardElement from '../components/CardElement';
-import { BsThreeDotsVertical } from "react-icons/bs";
 import useStore from "../zustandStore/store";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/react";
 function Page() {
   //  const [user,setUser]=useState(null);
     const [post,setPost]=useState("couplet");

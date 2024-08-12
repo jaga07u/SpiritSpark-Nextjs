@@ -7,7 +7,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { GoogleOAuthProvider,useGoogleOneTapLogin,GoogleLogin,useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios'
-import { jwtDecode } from "jwt-decode";
 import { useRouter } from 'next/navigation'
 import {useForm,SubmitHandler} from "react-hook-form"
 import {toast} from "react-hot-toast"
@@ -17,37 +16,12 @@ import {toast} from "react-hot-toast"
 function Page() {
         const route=useRouter();
         const [error,setError]=useState(false);
-        // const [users,setUsers]=useState({
-        //   username:"",
-        //   fullname:"",
-        //   email:"",
-        //   password:"",
-        //   isVerify:false,
-        //   avatarImg:"",
-        // })
         const {register,handleSubmit,formState:{errors}}=useForm(); 
-        // const user={
-        //   username:"",
-        //   fullname:"",
-        //   email:"",
-        //   password:"",
-        // }
-        
-        // const login = useGoogleLogin({
-        //   onSuccess: codeResponse => console.log(codeResponse),
-        //   flow: 'auth-code',
-        // });
-        //    const Onsubmit=async(e)=>{
-        //        e.preventDefault();
-        //        console.log(users);
-        //   const res=await axios.post("/api/users/signup",users);
-        //   console.log(res.data);
-        //   route.push("/login");
-        // }
        const submit=async(data)=>{
         try {
           const res=await axios.post("http://localhost:4000/api/v1/user/signup",data,);
           console.log(res.data);
+          toast.success("Thanks for register")
           route.push("/login");
         } catch (error) {
           console.log("something went Wrong",error);
