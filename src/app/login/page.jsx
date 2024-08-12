@@ -15,11 +15,6 @@ import useStore from "../zustandStore/store"
 export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
-  
-    // const [user,setUser]=useState({
-    //   email:"",
-    //   password:""
-    // })
     const [error,setError]=useState(false);
     const login=async(data)=>{
      // console.log(data);
