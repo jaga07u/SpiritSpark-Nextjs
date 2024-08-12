@@ -35,6 +35,7 @@ function Page() {
     const router=useRouter();
     const theme=useStore((state)=>state.theme);
     const userString = localStorage.getItem("user");
+   
   let user;
   
   if (userString) {
@@ -85,53 +86,7 @@ function Page() {
         //  style={{backgroundColor:`${theme == "dark"?"#09143C":""}`}}
         className="w-full h-[50px] flex justify-between items-center">
         <button onClick={back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px" }} /></button>
-        {/* <div className="w-[10%] h-full flex justify-center items-center">
-      <Dropdown>
-        <DropdownTrigger>
-          <Button 
-            color="default"
-            variant="light"
-            className="capitalize"
-          >
-            <BsThreeDotsVertical className="text-3xl"/>
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu 
-          aria-label="Dropdown Variants"
-          color="default"
-          variant="light"
-        >
-          <DropdownItem 
-            className={`${posts === "couplet" ? "text-success" : ""}`}
-            onClick={() => setPosts("couplet")}
-            key="new"
-          >
-            couplet
-          </DropdownItem>
-          <DropdownItem
-            className={`${posts === "quote" ? "text-success" : ""}`}
-            onClick={() => setPosts("quote")}
-            key="copy"
-          >
-            quote
-          </DropdownItem>
-          <DropdownItem
-            className={`${posts === "poem" ? "text-success" : ""}`}
-            onClick={() => setPosts("poem")}
-            key="edit"
-          >
-            poem
-          </DropdownItem>
-          <DropdownItem 
-            className={`${posts === "story" ? "text-success" : ""}`}
-            onClick={() => setPosts("story")}
-            key="delete"
-          >
-            story
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </div> */}
+       
         </div>
         <div className={`w-full h-[80px] flex justify-center items-center gap-2`}>
            <div className="w-[80px] h-full">

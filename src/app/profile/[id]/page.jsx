@@ -33,6 +33,8 @@ function Page({params}) {
     const [Cardhidden,setCardHidden]=useState(false);
     const [CardDetails,setCardDetails]=useState(null);
       const [isFollowed, setIsFollowed] = useState(false);
+      const [followerCount,setFollowercount]=useState(0);
+      const [followingCount,setFollowingcount]=useState(0);
     const router=useRouter();
     const theme=useStore((state)=>state.theme);
     const userString = localStorage.getItem("user");
@@ -54,6 +56,8 @@ function Page({params}) {
   console.log(res.data);
       setCurrUser(res.data.data.UserDetails);
       setIsFollowed(res.data.data.UserDetails.isFollowed)
+      setFollowercount(res.data.data.UserDetails.followerCount)
+   //   setFollowingcount(res.data.data.UserDetails.followingCount)
     setPosts(res.data.data.posts);
    }
  // console.log(posts);
@@ -63,6 +67,7 @@ function Page({params}) {
    const handleFollow = async () => {
     try {
       setIsFollowed((prev) => !prev);
+      setFollowercount((prev)=>prev+1);
       const res = await axios.post(`http://localhost:4000/api/v1/follow/${curruser?._id}`,{data:"jaga"},{withCredentials:true});
     
       console.log(res.data);
@@ -169,7 +174,7 @@ function Page({params}) {
            </div>
            <div className="w-[70px] h-[80px] text-center font-bold">
             <h1>
-              {curruser?.followerCount}
+              {followerCount}
               </h1>
             <h1>Follower</h1>
            </div>
