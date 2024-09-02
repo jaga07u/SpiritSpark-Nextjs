@@ -16,17 +16,17 @@ export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [error,setError]=useState(false);
-    const login=async(data)=>{
+    const login= async(data)=>{
      // console.log(data);
       try {
-        const res=await axios.post("http://localhost:4000/api/v1/user/signin",data,{withCredentials:true});
+        const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signin",data,{withCredentials:true})
+
           toast.success("Logged In Successfull");
           console.log(res.data);
           console.log(res.data.data.data.Token);
           Cookie.set('accessToken',res.data.data.data.Token,{path:'/',expires:7})
-
           localStorage.setItem("user",JSON.stringify(res.data.data.data));
-           route.push('/');
+          route.push('/');
       } catch (error) {
         console.log("invalid credentials",error);
         setError(true);

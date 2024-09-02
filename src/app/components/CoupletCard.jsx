@@ -9,7 +9,6 @@ import axios from 'axios';
 // import Dropdown from './Dropdown';
 import Avatar from './Avatar';
 //import useApp from '../contex/Contex';
-import UserAvatar from './UserAvatar';
 import { useRouter } from 'next/navigation';
 import {Card, CardHeader, CardBody} from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";
@@ -66,7 +65,7 @@ function CoupletCards({ Data }) {
     console.log(id);
     setIsLiked(!isLiked);
     setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
-    const res = await axios.post(`http://localhost:4000/api/v1/like/couplet`, { coupletId: id },{
+    const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/like/couplet`, { coupletId: id },{
       withCredentials:true
     }
     );

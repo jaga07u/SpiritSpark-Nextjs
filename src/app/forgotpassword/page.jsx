@@ -22,7 +22,9 @@ export default function page() {
         return ;
      }
       try {
-        const res=await axios.patch("http://localhost:4000/api/v1/user/forgotpassword",data,{withCredentials:true});
+        console.log(data);
+        
+        const res=await axios.patch("https://spiritspark-backend-3.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true});
           console.log(res.data);
           toast.success("Password Changed successfully");
            route.push('/login');

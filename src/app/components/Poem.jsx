@@ -21,7 +21,7 @@ function Couplet() {
     const getCardData = async () => {
         try {
           setLoading(true);
-          const res = await axios.get(`http://localhost:4000/api/v1/post/poem/${limit}/${page}`,{withCredentials:true});
+          const res = await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/post/poem/${limit}/${page}`,{withCredentials:true});
           const data = res.data.data;
           const cardData=data.data;
         //  console.log(cardData);

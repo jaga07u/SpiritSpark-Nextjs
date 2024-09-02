@@ -19,7 +19,7 @@ function Page() {
         const {register,handleSubmit,formState:{errors}}=useForm(); 
        const submit=async(data)=>{
         try {
-          const res=await axios.post("http://localhost:4000/api/v1/user/signup",data,);
+          const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signup",data,);
           console.log(res.data);
           toast.success("Thanks for register")
           route.push("/login");

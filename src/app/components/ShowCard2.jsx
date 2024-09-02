@@ -9,7 +9,6 @@ import axios from 'axios';
 // import Dropdown from './Dropdown';
 import Avatar from './Avatar';
 //import useApp from '../contex/Contex';
-import UserAvatar from './UserAvatar';
 import { useRouter } from 'next/navigation';
 import {Card, CardHeader, CardBody} from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";
@@ -81,14 +80,14 @@ function ShowCard2({ Data,CUser }) {
               const mode="poem";
               console.log(mode);
               
-           const res=await axios.delete(`http://localhost:4000/api/v1/post/${mode}/${id}`,{withCredentials:true});
+           const res=await axios.delete(`https://spiritspark-backend-3.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true});
            console.log(res.data);
            window.location.reload()
            
     }else{
        const mode="story";
        console.log(mode);
-       const res=await axios.delete(`http://localhost:4000/api/v1/post/${mode}/${id}`,{withCredentials:true});
+       const res=await axios.delete(`https://spiritspark-backend-3.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true});
        console.log(res.data);
        window.location.reload()
     }

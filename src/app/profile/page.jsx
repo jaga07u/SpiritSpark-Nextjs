@@ -37,7 +37,7 @@ function Page() {
     }
     const cards=[1,2,3,4,5,6,7,8,9];
    const getProfile=async()=>{
-    const res=await axios.get(`http://localhost:4000/api/v1/users/profile/post/${user?._id}`,{withCredentials:true});
+    const res=await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/users/profile/post/${user?._id}`,{withCredentials:true});
   console.log(res.data.data);
      setCurrUser(res.data.data.UserDetails);
     setPosts(res.data.data.posts);

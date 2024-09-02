@@ -12,7 +12,6 @@ import ProfileCard from '../../components/ProfileCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faOm } from '@fortawesome/free-solid-svg-icons'
 import EditProfile from '../../components/EditProfile';
-import EmptyProfile from '../../components/EmptyProfile';
 import useApp, { AppContext } from '../../contex/Contex';
 import CardElement from '../../components/CardElement';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -52,7 +51,7 @@ function Page({params}) {
     }
     const cards=[1,2,3,4,5,6,7,8,9];
    const getProfile=async()=>{
-    const res=await axios.get(`http://localhost:4000/api/v1/users/profile/post/${params.id}`,{withCredentials:true});
+    const res=await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/users/profile/post/${params.id}`,{withCredentials:true});
   console.log(res.data);
       setCurrUser(res.data.data.UserDetails);
       setIsFollowed(res.data.data.UserDetails.isFollowed)
@@ -68,7 +67,7 @@ function Page({params}) {
     try {
       setIsFollowed((prev) => !prev);
       setFollowercount((prev)=>prev+1);
-      const res = await axios.post(`http://localhost:4000/api/v1/follow/${curruser?._id}`,{data:"jaga"},{withCredentials:true});
+      const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/follow/${curruser?._id}`,{data:"jaga"},{withCredentials:true});
     
       console.log(res.data);
     } catch (error) {

@@ -13,7 +13,7 @@ export const UserTwitterCard = ({ data }) => {
 
   const handleFollow = async () => {
     try {
-      const res = await axios.post(`http://localhost:4000/api/v1/follow/${data?.Owner?._id}`,{data:"jaga"},{withCredentials:true});
+      const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/follow/${data?.Owner?._id}`,{data:"jaga"},{withCredentials:true});
       setIsFollowed((prev) => !prev);
       console.log(res.data);
     } catch (error) {

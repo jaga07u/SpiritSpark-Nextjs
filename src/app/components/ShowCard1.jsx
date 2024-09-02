@@ -9,7 +9,6 @@ import axios from 'axios';
 // import Dropdown from './Dropdown';
 import Avatar from './Avatar';
 //import useApp from '../contex/Contex';
-import UserAvatar from './UserAvatar';
 import { useRouter } from 'next/navigation';
 import {Card, CardHeader, CardBody} from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";

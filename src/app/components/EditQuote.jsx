@@ -54,7 +54,7 @@ function EditQuote({Data}) {
     formData.append('TextCol', TextCol);
   
     try {
-      const res = await axios.patch("http://localhost:3000/api/users/post", formData);
+      const res = await axios.patch("https://spiritspark-backend-3.onrender.com/api/users/post", formData);
       const response = res.data;
       console.log(response);
       toast.success("Your post Updated Successfully")

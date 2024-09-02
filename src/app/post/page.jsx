@@ -1,16 +1,15 @@
 "use client"
 import React, { useState } from 'react';
 import 'dotenv/config'
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { TbPhotoPlus } from 'react-icons/tb';
-import useApp from '../contex/Contex';
-import { GoogleGenerativeAI } from "@google/generative-ai"; // Ensure library is installed
+import useApp from '../contex/Contex'; // Ensure library is installed
 import { CgProfile } from "react-icons/cg";
 import axios from 'axios';
 import { BsThreeDotsVertical } from "react-icons/bs";
-import PostOpt from '../components/PostOpt';
 import { toast } from "react-hot-toast";
 import { TbPhotoFilled } from "react-icons/tb";
 import {
@@ -20,7 +19,6 @@ import {
   DropdownItem
 } from "@nextui-org/dropdown";
 import { Button } from '@nextui-org/react';
-import {Text_detection} from "../Generative_AI/Text_detection"
 import Cookie from "js-cookie"
 
 
@@ -35,6 +33,7 @@ function Page() {
   const [error, setError] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
   const [content,setContent]=useState("");
+  const [base64Data,setBase64Data]=useState(null);
   const router = useRouter();
   const selectedValue = React.useMemo(
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
@@ -73,51 +72,62 @@ function Page() {
     // }
   };
 
-  const img_detect = () => {
-    return new Promise((resolve, reject) => {
-      if (!imagefile) {
-        console.error("Please upload an image!");
-        reject("Please upload an image!");
-        return;
-      }
+  // const img_detect = () => {
+  //   return new Promise((resolve, reject) => {
+  //     if (!imagefile) {
+  //       console.error("Please upload an image!");
+  //       reject("Please upload an image!");
+  //       return;
+  //     }
   
-      try {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64String = reader.result.split(',')[1]; // Get base64 string from the result
-          const image = {
-            inlineData: {
-              data: base64String,
-              mimeType: imagefile.type
-            }
-          };
-          try {
-            const result = await model.generateContent([prompt, image]);
-            resolve(result.response.text().trim());
-          } catch (error) {
-            toast.error("Sorry you can't upload this type of content");
-            // console.error("Error generating content:", error);
-            reject("yes");
-          }
-        };
-        reader.readAsDataURL(imagefile); // Read the image file as a data URL
-      } catch (error) {
-        console.error("Error processing image:", error);
-        reject(error);
-      }
-    });
-  }
+  //     try {
+  //       const reader = new FileReader();
+  //       reader.onloadend = async () => {
+  //         const base64String = reader.result.split(',')[1]; // Get base64 string from the result
+  //         const image = {
+  //           inlineData: {
+  //             data: base64String,
+  //             mimeType: imagefile.type
+  //           }
+  //         };
+  //         try {
+  //           const result = await model.generateContent([prompt, image]);
+  //           resolve(result.response.text().trim());
+  //         } catch (error) {
+  //           toast.error("Sorry you can't upload this type of content");
+  //           // console.error("Error generating content:", error);
+  //           reject("yes");
+  //         }
+  //       };
+  //       reader.readAsDataURL(imagefile); // Read the image file as a data URL
+  //     } catch (error) {
+  //       console.error("Error processing image:", error);
+  //       reject(error);
+  //     }
+  //   });
+  // }
   
   const handleImageChange = (e) => {
     e.preventDefault();
     const file = e.target.files?.[0];
     if (file) {
-      setImagefile(file);
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      console.log(imageUrl);
+        setImagefile(file);
+        const imageUrl = URL.createObjectURL(file);
+        setImage(imageUrl);
+        console.log(imageUrl);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result; // This is the complete data URI
+            setBase64Data(base64String); // Save the full base64 string
+
+            // Log base64Data here
+            console.log(base64String); // This will show the base64 data
+        };
+        reader.readAsDataURL(file); // Read the image file as a data URL
     }
-  };
+};
+
   
   const QuoteSubmit = async () => {
     console.log(content);
@@ -131,30 +141,38 @@ function Page() {
     formData.append(`${selectedKeys.currentKey}`, content);
     formData.append('bgImg', imagefile);
     formData.append('TextCol', TextCol);
+    formData.append('image',base64Data)
   
     try {
-      const imageResult = await img_detect();
-      console.log(imageResult);
+      // const imageResult = await img_detect();
+      // console.log(imageResult);
   
-      const textResult = await Text_detection(content);
-      console.log(textResult);
+      // const textResult = await Text_detection(content);
+      // console.log(textResult);
   
-      if (imageResult?.toLocaleLowerCase() === "yes" || textResult?.toLocaleLowerCase() === "yes") {
-        console.log("yes");
-        toast.error("Sorry, you can't upload this type of content");
-        await axios.delete("http://localhost:4000/api/v1/user/signout", { withCredentials: true });
-        Cookie.remove('accessToken');
-        router.push('/login');
-        return;
-      }
+      // if (imageResult?.toLocaleLowerCase() === "yes" || textResult?.toLocaleLowerCase() === "yes") {
+      //   console.log("yes");
+      //   toast.error("Sorry, you can't upload this type of content");
+      //   await axios.delete("http://localhost:4000/api/v1/user/signout", { withCredentials: true });
+      //   Cookie.remove('accessToken');
+      //   router.push('/login');
+      //   return;
+      // }
   
-      const res = await axios.post(`http://localhost:4000/api/v1/post/${selectedKeys.currentKey}`, formData, {
+      const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/post/${selectedKeys.currentKey}`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       console.log(res.data);
+      if(!(res.data?.success)){
+         toast.error("Sorry you can't upload this type of content");
+         await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout", { withCredentials: true });
+         Cookie.remove('accessToken');
+         router.push('/login');
+         return ;
+      }
    router.push('/');
       // Continue with the submission logic if necessary
     } catch (error) {

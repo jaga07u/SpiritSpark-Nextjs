@@ -67,7 +67,7 @@ export default function Home() {
   },[searchValue])
   const searchUser=async()=>{
     if(searchValue.length>0){
-    const res=await axios.get(`http://localhost:4000/api/v1/user/search/${searchValue}`,{withCredentials:true});
+    const res=await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/user/search/${searchValue}`,{withCredentials:true});
     setSearchedUser(res.data?.data)
     console.log(res.data.data);
     }
@@ -75,7 +75,7 @@ export default function Home() {
   console.log(user);
   
   const logout=async()=>{
-   const res =await axios.delete("http://localhost:4000/api/v1/user/signout",{withCredentials:true});
+   const res =await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout",{withCredentials:true});
    console.log(res.data);
     Cookie.remove('accessToken');
     localStorage.removeItem("user");

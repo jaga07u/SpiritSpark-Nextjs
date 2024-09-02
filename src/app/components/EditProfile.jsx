@@ -46,7 +46,7 @@ function EditProfile({ User, hiidenble }) {
     }
 
     try {
-      const res = await axios.patch("http://localhost:4000/api/v1/user/update", formData, { withCredentials: true });
+      const res = await axios.patch("https://spiritspark-backend-3.onrender.com/api/v1/user/update", formData, { withCredentials: true });
       console.log(res.data);
       toast.success("Profile updated successfully");
       window.location.reload();
