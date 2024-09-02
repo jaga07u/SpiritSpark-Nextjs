@@ -4,34 +4,32 @@ import React, { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { GoogleOAuthProvider,useGoogleOneTapLogin,GoogleLogin } from '@react-oauth/google';
+// import { GoogleOAuthProvider,useGoogleOneTapLogin,GoogleLogin } from '@react-oauth/google';
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
-import {useForm,SubmitHandler } from "react-hook-form"
+import {useForm} from "react-hook-form"
 import {toast} from "react-hot-toast"
 import Cookie from "js-cookie"
-import useStore from "../zustandStore/store"
 
 export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [error,setError]=useState(false);
-    const login= async(data)=>{
-     // console.log(data);
+    const login = async (data) => {
       try {
-        const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signin",data,{withCredentials:true})
-
-          toast.success("Logged In Successfull");
-          console.log(res.data);
-          console.log(res.data.data.data.Token);
-          Cookie.set('accessToken',res.data.data.data.Token,{path:'/',expires:7})
-   //       localStorage.setItem("user",JSON.stringify(res.data.data.data));
+          const res = await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signin", data, { withCredentials: true });
+          toast.success("Logged In Successfully");
+          Cookie.set('accessToken', res.data.data.data.Token, { path: '/', expires: 7 });
           route.push('/');
       } catch (error) {
-        console.log("invalid credentials",error);
-        setError(true);
+          console.log("Invalid credentials", error);
+          setError(true);
       }
-    }
+  };
+  
+  const onSubmit=(data) => {
+      login(data);
+  };
   return (
     <section className="bg-white w-[100vw] h-[100vh]">
       

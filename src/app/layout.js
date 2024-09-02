@@ -35,7 +35,6 @@ export default function RootLayout({ children }) {
       <body className={` ${inter.className}`}>
         <Providers>
          <Toaster position="top-center" /> 
-         
         {children}
         </Providers>
         </body>
