@@ -7,6 +7,8 @@ import axios from 'axios';
 import { AiFillDelete } from "react-icons/ai";
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Cookie from "js-cookie"
+
 
 function EditProfile({ User, hiidenble }) {
   const [username, setUsername] = useState(User?.username || "");
@@ -44,9 +46,15 @@ function EditProfile({ User, hiidenble }) {
     if (avatarfile) {
       formData.append('avatar', avatarfile);  // Append the file to FormData
     }
-
+    const token = Cookie.get('accessToken');
     try {
-      const res = await axios.patch("https://spiritspark-backend-3.onrender.com/api/v1/user/update", formData, { withCredentials: true });
+      const res = await axios.patch("https://spirit-spark-backendv2.onrender.com/api/v1/user/update", formData, 
+        { withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+         });
       console.log(res.data);
       toast.success("Profile updated successfully");
       window.location.reload();

@@ -15,13 +15,19 @@ export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [error,setError]=useState(false);
+
+
     const login = async (data) => {
+     // console.log(data);
+     const token = Cookie.get('accessToken');
+      
       try {
-          const res = await axios.post("http://localhost:4000/api/v1/user/signin", data,
+          const res = await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/signin", data,
              { withCredentials: true ,
               headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
-              }
+            }
              }
             );
           toast.success("Logged In Successfully");

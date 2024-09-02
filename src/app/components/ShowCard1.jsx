@@ -17,8 +17,9 @@ import { UserTwitterCard } from './UserTweeterCard';
 import {Dropdown,DropdownTrigger, DropdownMenu, DropdownItem, RadioGroup, Radio} from "@nextui-org/react"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GiSaveArrow } from "react-icons/gi";
-import useApp from '../contex/Contex';
+import Cookie from "js-cookie"
 
+  
 
 function ShowCard1({ Data,CUser }) {
  // console.log(Data);
@@ -76,12 +77,19 @@ function ShowCard1({ Data,CUser }) {
   
     const deletePost=async(id)=>{
         console.log(id);
-        
+        const token = Cookie.get('accessToken');
          if(Data?.quote){
                    const mode="quote";
                    console.log(mode);
                    
-                const res=await axios.delete(`http://localhost:4000/api/v1/post/${mode}/${id}`,{withCredentials:true});
+                const res=await axios.delete(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${mode}/${id}`
+                  ,{
+                    withCredentials:true,
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+                  });
                 console.log(res.data);
                 window.location.reload()
                 

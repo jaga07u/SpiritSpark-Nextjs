@@ -2,7 +2,9 @@ import React,{useState,useEffect} from 'react'
 import CoupletCards from './CoupletCard';
 import StoryCard from './StoryCard' 
 import axios from 'axios';
+import Cookie from "js-cookie"
 
+  
 function Story() {
     const couplet=[1,2,3,5,6];
     const [page,setPage]=useState(1);
@@ -20,9 +22,16 @@ function Story() {
          getCardData();
        },[page])
     const getCardData = async () => {
+      const token = Cookie.get('accessToken');
         try {
           setLoading(true);
-          const res = await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/post/story/${limit}/${page}`,{withCredentials:true});
+          const res = await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/post/story/${limit}/${page}`,{
+            withCredentials:true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          }
+          });
           const data = res.data.data;
           const cardData=data.data;
         //  console.log(cardData);

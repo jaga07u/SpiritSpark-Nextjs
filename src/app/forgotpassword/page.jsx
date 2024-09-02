@@ -17,6 +17,8 @@ export default function page() {
     const [error,setError]=useState(false);
     const login=async(data)=>{
      // console.log(data);
+     const token = Cookie.get('accessToken');
+  
      if(data.password != data.confirmPassword){
         toast.error("password and confirm password must be same");
         return ;
@@ -24,7 +26,10 @@ export default function page() {
       try {
         console.log(data);
         
-        const res=await axios.patch("https://spiritspark-backend-3.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true});
+        const res=await axios.patch("https://spirit-spark-backendv2.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true,headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+      }});
           console.log(res.data);
           toast.success("Password Changed successfully");
            route.push('/login');

@@ -17,7 +17,8 @@ import { UserTwitterCard } from './UserTweeterCard';
 import {Dropdown,DropdownTrigger, DropdownMenu, DropdownItem, RadioGroup, Radio} from "@nextui-org/react"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GiSaveArrow } from "react-icons/gi";
-import useApp from '../contex/Contex';
+
+import Cookie from "js-cookie"
 
 
 function PoemCard({ Data }) {
@@ -63,7 +64,14 @@ function PoemCard({ Data }) {
     console.log(id);
     setIsLiked(!isLiked);
     setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
-     const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/like/poem`, { poemId: id },{withCredentials:true});
+    const token = Cookie.get('accessToken');
+     const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/like/poem`, { poemId: id },
+      {withCredentials:true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
     console.log(res.data);
     console.log("like");
   };

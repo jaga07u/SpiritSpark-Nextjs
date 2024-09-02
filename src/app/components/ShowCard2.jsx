@@ -17,7 +17,7 @@ import { UserTwitterCard } from './UserTweeterCard';
 import {Dropdown,DropdownTrigger, DropdownMenu, DropdownItem, RadioGroup, Radio} from "@nextui-org/react"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GiSaveArrow } from "react-icons/gi";
-import useApp from '../contex/Contex';
+import Cookie from "js-cookie"
 
 
 function ShowCard2({ Data,CUser }) {
@@ -75,19 +75,29 @@ function ShowCard2({ Data,CUser }) {
   
   const deletePost=async(id)=>{
     console.log(id);
-    
+    const token = Cookie.get('accessToken');
     if(Data?.poem){
               const mode="poem";
               console.log(mode);
               
-           const res=await axios.delete(`https://spiritspark-backend-3.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true});
+           const res=await axios.delete(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          }
+      
+           });
            console.log(res.data);
            window.location.reload()
            
     }else{
        const mode="story";
        console.log(mode);
-       const res=await axios.delete(`https://spiritspark-backend-3.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true});
+       const res=await axios.delete(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${mode}/${id}`,{withCredentials:true,  headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+});
        console.log(res.data);
        window.location.reload()
     }
@@ -95,12 +105,20 @@ function ShowCard2({ Data,CUser }) {
 const handleLike = async (id) => {
   console.log(id);
   setIsLiked(!isLiked);
+  const token = Cookie.get('accessToken');
+  
   setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
   if(Data.story){
-    const res = await axios.post(`http://localhost:4000/api/v1/like/story`, { storyId: id },{withCredentials:true});
+    const res = await axios.post(`http://localhost:4000/api/v1/like/story`, { storyId: id },{withCredentials:true,headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+  }});
     console.log(res.data);
   }else{
-    const res = await axios.post(`http://localhost:4000/api/v1/like/poem`, { poemId: id },{withCredentials:true});
+    const res = await axios.post(`http://localhost:4000/api/v1/like/poem`, { poemId: id },{withCredentials:true,headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+  }});
     console.log(res.data);
   }
   

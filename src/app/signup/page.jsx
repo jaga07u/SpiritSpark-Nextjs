@@ -10,16 +10,17 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import {useForm,SubmitHandler} from "react-hook-form"
 import {toast} from "react-hot-toast"
-
+import Cookie from "js-cookie"
 
 
 function Page() {
         const route=useRouter();
         const [error,setError]=useState(false);
         const {register,handleSubmit,formState:{errors}}=useForm(); 
+        const token = Cookie.get('accessToken');
        const submitForm=async(data)=>{
         try {
-          const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signup",data);
+          const res=await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/signup",data);
           console.log(res.data);
           toast.success("Thanks for register")
           route.push("/login");

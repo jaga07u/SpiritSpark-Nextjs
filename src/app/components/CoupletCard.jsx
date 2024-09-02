@@ -17,8 +17,7 @@ import { UserTwitterCard } from './UserTweeterCard';
 import {Dropdown,DropdownTrigger, DropdownMenu, DropdownItem, RadioGroup, Radio} from "@nextui-org/react"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GiSaveArrow } from "react-icons/gi";
-import useApp from '../contex/Contex';
-
+import Cookie from "js-cookie"
 
 function CoupletCards({ Data }) {
   console.log(Data);
@@ -63,10 +62,15 @@ function CoupletCards({ Data }) {
 
   const handleLike = async (id) => {
     console.log(id);
+    const token = Cookie.get('accessToken');
     setIsLiked(!isLiked);
     setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
-    const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/like/couplet`, { coupletId: id },{
-      withCredentials:true
+    const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/like/couplet`, { coupletId: id },{
+      withCredentials:true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
     }
     );
    

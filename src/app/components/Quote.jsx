@@ -22,7 +22,7 @@ function Quote() {
     const getCardData = async () => {
         try {
           setLoading(true);
-          const res = await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/post/quote/${limit}/${page}`,{withCredentials:true});
+          const res = await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/post/quote/${limit}/${page}`,{withCredentials:true});
           const data = res.data.data;
           const cardData=data.data;
          // console.log(cardData);

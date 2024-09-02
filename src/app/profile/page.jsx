@@ -9,8 +9,10 @@ import axios from 'axios';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import ProfileCard from '../components/ProfileCard';
 import EditProfile from '../components/EditProfile';
-import useApp, { AppContext } from '../contex/Contex';
 import useStore from "../zustandStore/store";
+import Cookie from "js-cookie"
+
+ 
 function Page() {
   //  const [user,setUser]=useState(null);
     const [post,setPost]=useState("couplet");
@@ -22,6 +24,7 @@ function Page() {
     const [userString, setUserString]=useState(null)
     const router=useRouter();
     const theme=useStore((state)=>state.theme);
+    const token = Cookie.get('accessToken');
   //  const userString = localStorage.getItem("user");
 
     useEffect(() => {
@@ -43,7 +46,11 @@ function Page() {
     }
     const cards=[1,2,3,4,5,6,7,8,9];
    const getProfile=async()=>{
-    const res=await axios.get(`https://spiritspark-backend-3.onrender.com/api/v1/users/profile/post/${user?._id}`,{withCredentials:true});
+   
+    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${user?._id}`,{withCredentials:true, headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+  }});
   console.log(res.data.data);
      setCurrUser(res.data.data.UserDetails);
     setPosts(res.data.data.posts);
@@ -65,9 +72,6 @@ function Page() {
 
     return (
         <>
-        <AppContext.Provider
-        // value={{CardDetails,setCardDetails}}
-         >
         {hidden && <EditProfile
         User={user} hiidenble={setHidden}
          /> }
@@ -141,7 +145,7 @@ function Page() {
         <>
        <EmptyProfile/>
         </> */}
-</AppContext.Provider>
+
 
         </>
        
