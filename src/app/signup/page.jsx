@@ -17,9 +17,9 @@ function Page() {
         const route=useRouter();
         const [error,setError]=useState(false);
         const {register,handleSubmit,formState:{errors}}=useForm(); 
-       const submit=async(data)=>{
+       const submitForm=async(data)=>{
         try {
-          const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signup",data,);
+          const res=await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signup",data);
           console.log(res.data);
           toast.success("Thanks for register")
           route.push("/login");
@@ -53,7 +53,7 @@ function Page() {
               </Link>
             </p>
             <form action="" className="mt-8"
-            onSubmit={handleSubmit(submit)}>
+            onSubmit={handleSubmit(submitForm)}>
               <div className="space-y-5">
               <div>
                   <label htmlFor="name" className="text-base font-medium text-gray-900">

@@ -17,7 +17,13 @@ export default function page() {
     const [error,setError]=useState(false);
     const login = async (data) => {
       try {
-          const res = await axios.post("https://spiritspark-backend-3.onrender.com/api/v1/user/signin", data, { withCredentials: true });
+          const res = await axios.post("http://localhost:4000/api/v1/user/signin", data,
+             { withCredentials: true ,
+              headers: {
+                'Content-Type': 'application/json'
+              }
+             }
+            );
           toast.success("Logged In Successfully");
           Cookie.set('accessToken', res.data.data.data.Token, { path: '/', expires: 7 });
           route.push('/');
@@ -27,9 +33,9 @@ export default function page() {
       }
   };
   
-  const onSubmit=(data) => {
-      login(data);
-  };
+  // const onSubmit=(data) => {
+  //     login(data);
+  // };
   return (
     <section className="bg-white w-[100vw] h-[100vh]">
       
