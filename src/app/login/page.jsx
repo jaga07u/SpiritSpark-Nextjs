@@ -25,7 +25,7 @@ export default function page() {
           console.log(res.data);
           console.log(res.data.data.data.Token);
           Cookie.set('accessToken',res.data.data.data.Token,{path:'/',expires:7})
-          localStorage.setItem("user",JSON.stringify(res.data.data.data));
+   //       localStorage.setItem("user",JSON.stringify(res.data.data.data));
           route.push('/');
       } catch (error) {
         console.log("invalid credentials",error);
