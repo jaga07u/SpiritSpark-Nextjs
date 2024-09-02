@@ -30,6 +30,7 @@ import axios from "axios";
 import useStore from "./zustandStore/store.js"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} from "@nextui-org/react";
 import SearchUser from "./components/User"
+import { jwtDecode } from "jwt-decode";
 
 export default function Home() {
   const [QuoteDetails, setQuoteDetails] = useState(null);
@@ -49,10 +50,24 @@ export default function Home() {
   const changeProfile=()=>{
     route.push(`/profile/`);
   }
+
+  
   useEffect(() => {
-    let usstr = localStorage.getItem("user")
-    setUserString(usstr);
-  },[])
+    const token = Cookie.get('accessToken');
+
+    if (token) {
+      try {
+        const user = jwtDecode(token); // Decode the token
+        localStorage.setItem("user", JSON.stringify(user)); // Store the user object as a string in localStorage
+        const usstr = localStorage.getItem("user");
+        setUserString(usstr);
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
+    } else {
+      console.error("No token found");
+    }
+  }, []);
  
   let user;
   
@@ -72,7 +87,10 @@ export default function Home() {
   },[searchValue])
   const searchUser=async()=>{
     if(searchValue.length>0){
-    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/user/search/${searchValue}`,{withCredentials:true});
+    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/user/search/${searchValue}`,{withCredentials:true,headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+  }});
     setSearchedUser(res.data?.data)
     console.log(res.data.data);
     }
@@ -80,7 +98,10 @@ export default function Home() {
   console.log(user);
   
   const logout=async()=>{
-   const res =await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout",{withCredentials:true});
+   const res =await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout",{withCredentials:true,headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+}});
    console.log(res.data);
     Cookie.remove('accessToken');
     localStorage.removeItem("user");

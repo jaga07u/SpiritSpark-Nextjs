@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import CoupletCards from './CoupletCard';
 import QuoteCards from './QuoteCards';
 import axios from 'axios';
+import Cookie from "js-cookie"
 
 function Quote() {
     const quote=[1,2,3,5,6];
@@ -14,6 +15,8 @@ function Quote() {
   const [UserCard, setUserCard] = useState(null);
   const [scrollDirection, setScrollDirection] = useState(null);
     const limit=8;
+    const token = Cookie.get('accessToken');
+ 
 
     useEffect(()=>{
         // console.log("Reloding completed");
@@ -22,7 +25,10 @@ function Quote() {
     const getCardData = async () => {
         try {
           setLoading(true);
-          const res = await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/post/quote/${limit}/${page}`,{withCredentials:true});
+          const res = await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/post/quote/${limit}/${page}`,{withCredentials:true, headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }});
           const data = res.data.data;
           const cardData=data.data;
          // console.log(cardData);
