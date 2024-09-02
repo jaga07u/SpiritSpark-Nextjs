@@ -29,15 +29,15 @@ function Page() {
       setUserString(usstr);
     },[])
    
-  // let user;
+  let user;
   
-  // if (userString) {
-  //   try {
-  //     user = JSON.parse(userString); // Parse the JSON string to an object
-  //   } catch (e) {
-  //     console.error("Error parsing user data from localStorage", e);
-  //   }
-  // }
+  if (userString) {
+    try {
+      user = JSON.parse(userString); // Parse the JSON string to an object
+    } catch (e) {
+      console.error("Error parsing user data from localStorage", e);
+    }
+  }
     const back=()=>{
         router.push("/");
     }

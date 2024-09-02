@@ -40,6 +40,7 @@ export default function Home() {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
   const [selectedKeys1, setSelectedKeys1] =useState(new Set(["Hindi"]));
   const [currentMode,setCurrentMode]=useState("couplet");
+  const [userString, setUserString]=useState(null)
   const theme=useStore((state)=>state.theme);
   const route=useRouter();
   const postChange=()=>{
@@ -48,7 +49,11 @@ export default function Home() {
   const changeProfile=()=>{
     route.push(`/profile/`);
   }
-  const userString = localStorage.getItem("user");
+  useEffect(() => {
+    let usstr = localStorage.getItem("user")
+    setUserString(usstr);
+  },[])
+ 
   let user;
   
   if (userString) {
