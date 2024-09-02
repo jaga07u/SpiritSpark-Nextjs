@@ -19,19 +19,25 @@ function Page() {
     const [hidden,setHidden]=useState(false);
     const [Cardhidden,setCardHidden]=useState(false);
     const [CardDetails,setCardDetails]=useState(null);
+    const [userString, setUserString]=useState(null)
     const router=useRouter();
     const theme=useStore((state)=>state.theme);
-    const userString = localStorage.getItem("user");
+  //  const userString = localStorage.getItem("user");
+
+    useEffect(() => {
+      let usstr = localStorage.getItem("user")
+      setUserString(usstr);
+    },[])
    
-  let user;
+  // let user;
   
-  if (userString) {
-    try {
-      user = JSON.parse(userString); // Parse the JSON string to an object
-    } catch (e) {
-      console.error("Error parsing user data from localStorage", e);
-    }
-  }
+  // if (userString) {
+  //   try {
+  //     user = JSON.parse(userString); // Parse the JSON string to an object
+  //   } catch (e) {
+  //     console.error("Error parsing user data from localStorage", e);
+  //   }
+  // }
     const back=()=>{
         router.push("/");
     }
