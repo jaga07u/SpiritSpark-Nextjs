@@ -100,7 +100,8 @@ export default function Home() {
   console.log(user);
   
   const logout=async()=>{
-   const res =await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout",{withCredentials:true,headers: {
+   const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,
+    headers: {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json'
 }});
