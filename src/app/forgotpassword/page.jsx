@@ -26,7 +26,7 @@ export default function page() {
       try {
         console.log(data);
         
-        const res=await axios.patch("https://spirit-spark-backendv2.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true,
+        const res=await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true,
           headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
