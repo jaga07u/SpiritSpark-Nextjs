@@ -159,7 +159,7 @@ function Page() {
       //   return;
       // }
   
-      const res = await axios.post(`https://spiritspark-backend-3.onrender.com/api/v1/post/${selectedKeys.currentKey}`, formData, {
+      const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${selectedKeys.currentKey}`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -168,7 +168,7 @@ function Page() {
       console.log(res.data);
       if(!(res.data?.success)){
          toast.error("Sorry you can't upload this type of content");
-         await axios.delete("https://spiritspark-backend-3.onrender.com/api/v1/user/signout", { withCredentials: true });
+         await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout", { withCredentials: true });
          Cookie.remove('accessToken');
          router.push('/login');
          return ;
