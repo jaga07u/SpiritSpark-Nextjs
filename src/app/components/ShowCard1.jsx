@@ -73,11 +73,11 @@ function ShowCard1({ Data,CUser }) {
   }
   console.log("CurrUser",user?._id);
   console.log("ProfileUser",CUser?._id);
-  
+  const token = Cookie.get('accessToken');
   
     const deletePost=async(id)=>{
         console.log(id);
-        const token = Cookie.get('accessToken');
+  
          if(Data?.quote){
                    const mode="quote";
                    console.log(mode);
@@ -97,7 +97,11 @@ function ShowCard1({ Data,CUser }) {
             const mode="couplet";
             console.log(mode);
             
-            const res=await axios.delete(`http://localhost:4000/api/v1/post/${mode}/${id}`,{withCredentials:true});
+            const res=await axios.delete(`http://localhost:4000/api/v1/post/${mode}/${id}`,{withCredentials:true,    headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          }
+            });
             console.log(res.data);
          }window.location.reload()
     }
