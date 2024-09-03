@@ -51,10 +51,10 @@ export default function Home() {
     route.push(`/profile/`);
   }
 
-  
-  useEffect(() => {
-    const token = Cookie.get('accessToken');
+  const token = Cookie.get('accessToken');
 
+  useEffect(() => {
+ 
     if (token) {
       try {
         const user = jwtDecode(token); // Decode the token

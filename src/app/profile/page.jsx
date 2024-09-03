@@ -11,6 +11,7 @@ import ProfileCard from '../components/ProfileCard';
 import EditProfile from '../components/EditProfile';
 import useStore from "../zustandStore/store";
 import Cookie from "js-cookie"
+import { jwtDecode } from "jwt-decode";
 
  
 function Page() {
@@ -27,10 +28,23 @@ function Page() {
     const token = Cookie.get('accessToken');
   //  const userString = localStorage.getItem("user");
 
-    useEffect(() => {
-      let usstr = localStorage.getItem("user")
-      setUserString(usstr);
-    },[])
+  useEffect(() => {
+    const token = Cookie.get('accessToken');
+
+    if (token) {
+      try {
+        const user = jwtDecode(token); // Decode the token
+        localStorage.setItem("user", JSON.stringify(user)); // Store the user object as a string in localStorage
+        const usstr = localStorage.getItem("user");
+        setUserString(usstr);
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
+    } else {
+      console.error("No token found");
+    }
+  }, []);
+ 
    
   let user;
   

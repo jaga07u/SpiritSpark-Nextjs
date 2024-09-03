@@ -36,16 +36,16 @@ function Page({params}) {
       const [followingCount,setFollowingcount]=useState(0);
     const router=useRouter();
     const theme=useStore((state)=>state.theme);
-    const userString = localStorage.getItem("user");
-  let user;
+  //   const userString = localStorage.getItem("user");
+  // let user;
   
-  if (userString) {
-    try {
-      user = JSON.parse(userString); // Parse the JSON string to an object
-    } catch (e) {
-      console.error("Error parsing user data from localStorage", e);
-    }
-  }
+  // if (userString) {
+  //   try {
+  //     user = JSON.parse(userString); // Parse the JSON string to an object
+  //   } catch (e) {
+  //     console.error("Error parsing user data from localStorage", e);
+  //   }
+  // }
     const back=()=>{
         router.push("/");
     }
