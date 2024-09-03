@@ -87,10 +87,12 @@ export default function Home() {
   },[searchValue])
   const searchUser=async()=>{
     if(searchValue.length>0){
-    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/user/search/${searchValue}`,{withCredentials:true,headers: {
+    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/user/search/${searchValue}`,{withCredentials:true,
+      headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
-  }});
+  }
+});
     setSearchedUser(res.data?.data)
     console.log(res.data.data);
     }

@@ -39,6 +39,7 @@ function Page() {
     () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
   );
+  const token = Cookie.get('accessToken');
  // const router=useRouter();
   const genAI = new GoogleGenerativeAI("AIzaSyBucoxS0xDzS-N5f75gYHUfcT0isPb7T68"); // Replace with your actual key
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // Double-check model compatibility
@@ -162,13 +163,18 @@ function Page() {
       const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${selectedKeys.currentKey}`, formData, {
         withCredentials: true,
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
-        }
+      }
       });
       console.log(res.data);
       if(!(res.data?.success)){
          toast.error("Sorry you can't upload this type of content");
-         await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout", { withCredentials: true });
+         await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout", { withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+        }
+          });
          Cookie.remove('accessToken');
          router.push('/login');
          return ;
