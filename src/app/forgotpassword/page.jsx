@@ -15,9 +15,9 @@ export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [error,setError]=useState(false);
+    const token = Cookie.get('accessToken');
     const login=async(data)=>{
-     // console.log(data);
-     const token = Cookie.get('accessToken');
+     // console.log(data)
   
      if(data.password != data.confirmPassword){
         toast.error("password and confirm password must be same");
@@ -26,7 +26,7 @@ export default function page() {
       try {
         console.log(data);
         
-        const res=await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true,
+        const res=await axios.patch("https://spirit-spark-backendv2.onrender.com/api/v1/user/forgotpassword",data,{withCredentials:true,
           headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
