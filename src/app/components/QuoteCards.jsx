@@ -57,13 +57,18 @@ function QuoteCards({ Data }) {
   // const hanldeUserProfile=async(id)=>{
   //     router.push(`/profile/${id}`);
   // }
-
+  const token = Cookie.get('accessToken');
   const handleLike = async (id) => {
     console.log(id);
     setIsLiked(!isLiked);
     setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1);
-    const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/like/quote`, { quoteId: id },{withCredentials:true});
-  
+    const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/like/quote`, { quoteId: id },{withCredentials:true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+    });
+   
     console.log(res.data);
     console.log("like");
   };
