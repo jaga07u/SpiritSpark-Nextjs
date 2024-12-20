@@ -165,7 +165,7 @@ function Page() {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
-      }
+      },
       });
       console.log(res.data);
       toast.dismiss(toastId);
