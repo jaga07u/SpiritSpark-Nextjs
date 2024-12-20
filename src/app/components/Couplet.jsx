@@ -19,6 +19,7 @@ function Couplet() {
         // console.log("Reloding completed");
          getCardData();
        },[page])
+       //https://spiritspark-backend-3.onrender.com/api/v1/user/signout
     const getCardData = async () => {
       const token = Cookie.get('accessToken');
         try {
@@ -33,7 +34,7 @@ function Couplet() {
             });
           const data = res.data.data;
           const cardData=data.data;
-        //  console.log(cardData);
+          console.log(cardData);
            setData((prev) => [...prev, ...cardData]);
           setLoading(false);
         } catch (error) {

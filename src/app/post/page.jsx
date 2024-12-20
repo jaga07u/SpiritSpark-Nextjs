@@ -41,7 +41,7 @@ function Page() {
   );
   const token = Cookie.get('accessToken');
  // const router=useRouter();
-  const genAI = new GoogleGenerativeAI("AIzaSyBucoxS0xDzS-N5f75gYHUfcT0isPb7T68"); // Replace with your actual key
+  const genAI = new GoogleGenerativeAI("AIzaSyBZDc9p5AEfmEJKUHo-iVpY7DO7XuxNYEA"); // Replace with your actual key
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // Double-check model compatibility
   const prompt = "if the given picture has any romance or adult content then respond only yes otherwise respond no. don't give any fullstop";
 
@@ -160,6 +160,8 @@ function Page() {
       //   return;
       // }
       const toastId = toast.loading("Wait, we are checking your content");
+      console.log(selectedKeys.currentKey);
+      console.log(formData);
       const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${selectedKeys.currentKey}`, formData, {
         withCredentials: true,
         headers: {
