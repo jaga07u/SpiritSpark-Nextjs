@@ -17,7 +17,7 @@ import { UserTwitterCard } from './UserTweeterCard';
 import {Dropdown,DropdownTrigger, DropdownMenu, DropdownItem, RadioGroup, Radio} from "@nextui-org/react"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GiSaveArrow } from "react-icons/gi";
-
+import Cookie from "js-cookie"
 
 function QuoteCards({ Data }) {
   // const [isFollowed, setIsFollowed] = useState(Data?.isFollowed || false);
