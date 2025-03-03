@@ -45,10 +45,7 @@ export default function Home() {
   const theme=useStore((state)=>state.theme);
   const route=useRouter();
   const postChange=()=>{
-    route.push('/post/')
-  }
-  const changeProfile=()=>{
-    route.push(`/profile/`);
+    route.push('/post/');
   }
 
   const token = Cookie.get('accessToken');
@@ -78,6 +75,9 @@ export default function Home() {
       console.error("Error parsing user data from localStorage", e);
     }
   }
+  const changeProfile=()=>{
+    route.push(`/profile/${user?._id}`);
+  }
   
   const avatarImg = user ? user.avatarImg : null;
   const email=user?user.email:null;
@@ -97,7 +97,7 @@ export default function Home() {
     console.log(res.data.data);
     }
   }
-  console.log(user);
+  // console.log(user);
   
   const logout=async()=>{
    const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,

@@ -4,9 +4,13 @@ import { useRouter } from 'next/navigation';
 function Dropdown({QuoteId}) {
   const router=useRouter();
   const UpdateQuote=()=>{
-    console.log("hii");
-    router.push(`post/${QuoteId}`)
-  
+    console.log("hii",QuoteId);
+    router.push(`post/${QuoteId}`);
+  }
+  //
+  const DeletePost=()=>{
+    console.log("hii",QuoteId);
+    router.push(`http://localhost:4000//${QuoteId}`);
   }
     return (
         <>
