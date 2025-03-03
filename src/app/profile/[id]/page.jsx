@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // /* eslint-disable react-hooks/exhaustive-deps */
-"use client"
+"use client";
 // import React from 'react'
 // import { useState,useEffect } from 'react';
 // import { useRouter } from 'next/navigation'
