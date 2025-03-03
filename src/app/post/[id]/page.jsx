@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
-import useStore from "../zustandStore/store"
+import useStore from "../../zustandStore/store"
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookie from "js-cookie"
