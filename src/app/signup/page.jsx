@@ -19,6 +19,8 @@ function Page() {
         const {register,handleSubmit,formState:{errors}}=useForm(); 
         const token = Cookie.get('accessToken');
        const submitForm=async(data)=>{
+        console.log(data);
+        
         try {
           const res=await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/signup",data);
           console.log(res.data);
@@ -65,11 +67,16 @@ function Page() {
                     <input
                       className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                       type="text"
-                      placeholder="Full Name"
-                      id="name"
-                      {...register("username",{required:true,pattern: /^(?=(?:.*\d){2,})[a-zA-Z\d]{1,}$/})}
+                      placeholder="username"
+                      id="username"
+                      {...register("username",{required:true, pattern: /^(?=(?:.*\d.*\d))[\w]+$/})}
                     ></input>
-                     {errors.username && <span className="text-red-600">This field is required</span>}
+                  {errors.username?.type === "required" && (
+  <span className="text-red-600">Username is required</span>
+)}
+{errors.username?.type === "pattern" && (
+  <span className="text-red-600">Username must contain at least two digits and only letters, numbers, or underscores</span>
+)}
                   </div>
                 </div>
                 <div>
@@ -82,7 +89,7 @@ function Page() {
                       className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                       type="text"
                       placeholder="Full Name"
-                      id="name"
+                      id="fullname"
                       {...register("fullname",{required:true})}
                     ></input>
                      {errors.fullname && <span className="text-red-600">This field is required</span>}
