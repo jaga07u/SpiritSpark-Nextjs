@@ -15,6 +15,7 @@ import useStore from '../../zustandStore/store';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import Dropdown from "../../components/Dropdown"
+import EditProfie from "../../components/EditProfile"
 function Page({params}) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [following, setFollowing] = useState(false);
@@ -26,6 +27,7 @@ function Page({params}) {
   const [isSaved, setIsSaved] = useState(false);
   const [showBigLotus, setShowBigLotus] = useState(false);
   const [curruser,setCurrUser]=useState(null);
+  const [show,setshow]=useState(false);
   const theme=useStore((state)=>state.theme);
    const token = Cookie.get('accessToken');
   useEffect(()=>{
@@ -119,9 +121,13 @@ function Page({params}) {
   //   }
   // ]
   const router=useRouter();
-
+  const ProfileEdit=()=>{
+    console.log("hii");
+    setshow(true);
+  }
   return (
     <div className={`min-h-screen ${theme == "dark"?"bg-slate-900": "bg-gray-50"}`}>
+        {show && <EditProfie User={curruser} hiidenble={setshow}/>}
        <button onClick={Back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px", marginTop: "0px",color:`${theme=="dark" ? "white":"black" }`}}/></button>
       {/* Cover Photo */}
       <div 
@@ -165,14 +171,20 @@ function Page({params}) {
                 </div>
               </div>
               <div className="mt-5 flex justify-center sm:mt-0">
-                <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <Button
+                className="inline-flex items-center px-4 py-2 border cursor-pointer border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={ProfileEdit}
+                >
                   <Settings className="h-4 w-4 mr-2" />
                   Edit Profile
-                </button>
-                <button className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                </Button>
+                <Button
+                 onClick={ProfileEdit}
+                 className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Follow
-                </button>
+                </Button>
               </div>
             </div>
 
