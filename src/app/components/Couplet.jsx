@@ -65,15 +65,14 @@ function Couplet() {
             window.removeEventListener("scroll", handleInfiniteScroll);
         };
     }, [loading, hasMore]);
-
     return (
         <>
-          { data.length > 0 ?
+          { data.length > 0 ? 
             <div className="w-full min-h-full grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2">
                 {data.map((item) => (
                     <CoupletCards Data={item} key={item?._id} />
                 ))}
-                {!hasMore && (
+                {!hasMore && data.length()>=2 (
                  <LoadingLotus isLoading={!hasMore} />
             )}
             </div>
