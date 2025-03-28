@@ -72,7 +72,7 @@ function Couplet() {
                 {data.map((item) => (
                     <CoupletCards Data={item} key={item?._id} />
                 ))}
-                {(!hasMore && data.length>=2) (
+                {!hasMore &&  (
                  <LoadingLotus isLoading={!hasMore} />
             )}
             </div>
