@@ -1,6 +1,5 @@
  "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { formatDistanceToNow } from "date-fns";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import useStore from "../zustandStore/store"
@@ -44,49 +43,50 @@ export default function PoemCard() {
     // }
   
     const formData = new FormData();
-    formData.append(`${selectedImage}`, postText);
+    formData.append(`${selectedMode.toLocaleLowerCase()}`, postText);
    // let selectImg="";
-    const data={};
-    if(selectedMode=="Quote") {
-      data["quote"]=postText;
-      data["bgImg"]=imagefile;
-      data["TextCol"]="peir90e";
-      data["image"]=base64Data;
-      data["url"]=selectedImage
-    }
-    else if(selectedMode=="Couplet"){
-      data["couplet"]=postText;
-      data["bgImg"]=imagefile;
-      data["TextCol"]="peir90e";
-      data["image"]=base64Data;
-      data["url"]=selectedImage
-    }
-    else if(selectedMode=="Poem"){
-      data["poem"]=postText;
-      data["bgImg"]=imagefile;
-      data["TextCol"]="peir90e";
-      data["image"]=base64Data;
-      data["url"]=selectedImage
-    }
-    else{
-      data["story"]=postText;
-      data["bgImg"]=imagefile;
-      data["TextCol"]="peir90e";
-      data["image"]=base64Data;
-      data["url"]=selectedImage
-    }
-  //   formData.append('bgImg',imagefile);
-  //   formData.append('TextCol', "04st");
-  //   formData.append('image',base64Data);
-  //   formData.append('url',selectedImage);
-  //  console.log(formData);
-  //  console.log(formData.url);
-   console.log(data);
+    //  const data={};
+    // if(selectedMode=="Quote") {
+    //   data["quote"]=postText;
+    //   data["bgImg"]=imagefile;
+    //   data["TextCol"]="peir90e";
+    //   data["image"]=base64Data;
+    //   data["url"]=selectedImage
+    // }
+    // else if(selectedMode=="Couplet"){
+    //   data["couplet"]=postText;
+    //   data["bgImg"]=imagefile;
+    //   data["TextCol"]="peir90e";
+    //   data["image"]=base64Data;
+    //   data["url"]=selectedImage
+    // }
+    // else if(selectedMode=="Poem"){
+    //   data["poem"]=postText;
+    //   data["bgImg"]=imagefile;
+    //   data["TextCol"]="peir90e";
+    //   data["image"]=base64Data;
+    //   data["url"]=selectedImage
+    // }
+    // else{
+    //   data["story"]=postText;
+    //   data["bgImg"]=imagefile;
+    //   data["TextCol"]="peir90e";
+    //   data["image"]=base64Data;
+    //   data["url"]=selectedImage
+    // }
+    formData.append('bgImg',imagefile);
+    formData.append('TextCol', "04st");
+    formData.append('image',base64Data);
+    formData.append('url',selectedImage);
+   console.log(formData);
+   console.log(formData.url);
+ //  console.log(data);
    const toastId = toast.loading("Wait, we are checking your content");
+  //https://spirit-spark-backendv2.onrender.com/api/v1/post/
     try {
       console.log(selectedMode);
       console.log(formData);
-      const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${selectedMode?.toLocaleLowerCase()}`, data, {
+      const res = await axios.post(`http://localhost:4000/api/v1/post/${selectedMode?.toLocaleLowerCase()}`, formData, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -141,6 +141,7 @@ export default function PoemCard() {
           throw new Error("Failed to fetch images");
         }
         const data = await res.json();
+        setImagefile(null);
         setImages((prevImages) => [...prevImages, ...data.results.map((img) => img.urls.small)]);
       } catch (err) {
         console.error("Error fetching images:", err);

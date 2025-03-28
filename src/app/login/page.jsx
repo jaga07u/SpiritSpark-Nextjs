@@ -20,7 +20,7 @@ export default function page() {
     const login = async (data) => {
      // console.log(data);
       try {
-          const res = await axios.post("https://spirit-spark-backendv2.onrender.com/api/v1/user/signin", data,
+          const res = await axios.post("http://localhost:4000/api/v1/user/signin", data,
              { withCredentials: true }
             );
           toast.success("Logged In Successfully");

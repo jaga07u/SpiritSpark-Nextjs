@@ -78,8 +78,8 @@ function Couplet() {
             )}
             </div>
             :
-                <div className="flex justify-center items-center w-full h-full py-32">
-                   <LoadingLotus isLoading={true} />
+              <div className="flex justify-center items-center w-full h-full py-32">
+                   { loading && <LoadingLotus isLoading={true} /> }
                 </div>
         }
             
