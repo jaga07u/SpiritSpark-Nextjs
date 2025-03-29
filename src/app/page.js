@@ -41,7 +41,8 @@ export default function Home() {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["couplet"]));
   const [selectedKeys1, setSelectedKeys1] =useState(new Set(["Hindi"]));
   const [currentMode,setCurrentMode]=useState("couplet");
-  const [userString, setUserString]=useState(null)
+  const [userString, setUserString]=useState(null);
+  const [currentUser,setCurrUser]=useState(null);
   const theme=useStore((state)=>state.theme);
   const route=useRouter();
   const postChange=()=>{
@@ -49,18 +50,31 @@ export default function Home() {
   }
 
   const token = Cookie.get('accessToken');
-
+  const getProfile=async(id)=>{
+    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${id}`,{
+     withCredentials:true,
+     headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+  },});
+    console.log(res.data);
+      setCurrUser(res.data.data.UserDetails);
+    }
   useEffect(() => {
- 
+    let user2;
+  
     if (token) {
       try {
         const user = jwtDecode(token); // Decode the token
         localStorage.setItem("user", JSON.stringify(user)); // Store the user object as a string in localStorage
         const usstr = localStorage.getItem("user");
+        user2 = JSON.parse(usstr); // Parse the string back to an object
         setUserString(usstr);
       } catch (error) {
         console.error("Invalid token", error);
       }
+      console.log(user2._id);
+      getProfile(user2._id);
     } else {
       console.error("No token found");
     }
@@ -79,7 +93,7 @@ export default function Home() {
     route.push(`/profile/${user?._id}`);
   }
   
-  const avatarImg = user ? user.avatarImg : null;
+  const avatarImg = currentUser ? currentUser.avatarImg : null;
   const email=user?user.email:null;
   const fullname=user?user.fullname:null;
   useEffect(()=>{

@@ -2,9 +2,8 @@
 // /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from 'react'
-import { MapPin, Link as LinkIcon, Calendar, Users, Settings, MessageSquare, Heart, MessageCircle, Bookmark, X, Share2 } from 'lucide-react'
+import { MapPin, Link as LinkIcon, UserPlus,UserCheck, Settings, Heart, MessageCircle, Bookmark, X, Share2 } from 'lucide-react'
 import { Button } from "@nextui-org/react";
-import { UserPlus, UserCheck} from "lucide-react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
@@ -145,17 +144,17 @@ function Page({params}) {
               <div className="sm:flex sm:space-x-5">
                 <div className="flex-shrink-0">
                   <img
-                    className="mx-auto h-32 w-32 rounded-full border-4 border-white shadow-lg"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150"
+                    className="mx-auto h-28 w-28 rounded-full border-4 border-white shadow-lg"
+                    src={curruser?.avatarImg || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop"}
                     alt="Profile"
                   />
                 </div>
                 <div className="mt-4 sm:mt-0 sm:pt-1 sm:text-left">
                   <div className="flex items-center">
-                    <h1 className="text-xl font-bold  sm:text-2xl">Sarah Anderson</h1>
-                    <span className="ml-2 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-full">Pro</span>
+                    <h1 className="text-xl font-bold  sm:text-2xl">{curruser?.username}</h1>
+                    {/* <span className="ml-2 px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-full">Pro</span> */}
                   </div>
-                  <p className="text-sm font-medium">@sarahanderson</p>
+                  <p className="text-sm font-medium">@{curruser?.fullname}</p>
                   {/* <div className="mt-2 flex items-center text-sm text-gray-500">
                     <MapPin className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
                     San Francisco, CA
@@ -181,8 +180,7 @@ function Page({params}) {
                 <Button
                  onClick={ProfileEdit}
                  className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                  
-                  <MessageSquare className="h-4 w-4 mr-2" />
+                 <UserPlus className='h-4 w-4 mr-2'/>
                   Follow
                 </Button>
               </div>
@@ -199,15 +197,15 @@ function Page({params}) {
 
             <div className="mt-6 grid grid-cols-3 gap-6 text-center">
               <div className="border rounded-lg px-4 py-3">
-                <div className="text-2xl font-bold ">1.2M</div>
+                <div className="text-2xl font-bold ">{followerCount}</div>
                 <div className="text-sm ">Followers</div>
               </div>
               <div className="border rounded-lg px-4 py-3">
-                <div className="text-2xl font-bold ">829</div>
+                <div className="text-2xl font-bold ">{followeingCount}</div>
                 <div className="text-sm 0">Following</div>
               </div>
               <div className="border rounded-lg px-4 py-3">
-                <div className="text-2xl font-bold ">2.4K</div>
+                <div className="text-2xl font-bold ">{posts.length}</div>
                 <div className="text-sm ">Posts</div>
               </div>
             </div>

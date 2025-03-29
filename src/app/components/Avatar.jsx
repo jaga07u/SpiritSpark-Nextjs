@@ -1,21 +1,24 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from "next/image";
+import React from "react";
 
-function Avatar({AvatarUrl,width,margin,changefun}) {
-    return (
-        <>
-<div className="avatar" onClick={changefun}>
-  <div className={`w-16 rounded-full`}>
-  <Image 
-    width={40}
-    height={40}
-    src={`${AvatarUrl}`}
-    alt="AirMax Pro"
-    />
-  </div>
-</div>
-        </>
-    )
+function Avatar({ AvatarUrl, width = 40, margin, changefun }) {
+  return (
+    <div className={`avatar cursor-pointer ${margin}`} onClick={changefun}>
+      <div
+        className={`rounded-full border-4 border-pink-600 shadow-lg`}
+        style={{ width: `${width}px`, height: `${width}px` }}
+      >
+        <Image
+          width={width}
+          height={width}
+          src={AvatarUrl || "/default-avatar.png"} // Ensure a valid URL
+          alt="User Avatar"
+          className="rounded-full"
+          quality={100}
+        />
+      </div>
+    </div>
+  );
 }
 
-export default Avatar
+export default Avatar;

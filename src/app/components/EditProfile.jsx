@@ -1,14 +1,13 @@
 "use client";
-import React, { useState } from 'react';
-import Avatar from '../components/Avatar';
-import { CgProfile } from "react-icons/cg";
+import React, { useState } from "react";
+import Avatar from "../components/Avatar";
 import { MdCancel } from "react-icons/md";
-import axios from 'axios';
-import { AiFillDelete } from "react-icons/ai";
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import Cookie from "js-cookie"
-
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Input, Button } from "@nextui-org/react";
+import Cookie from "js-cookie";
+import { Camera } from "lucide-react";
+import useStore from "../zustandStore/store";
 
 function EditProfile({ User, hiidenble }) {
   const [username, setUsername] = useState(User?.username || "");
@@ -16,47 +15,44 @@ function EditProfile({ User, hiidenble }) {
   const [avatarfile, setAvatarfile] = useState(null);
   const [avatarURL, setAvatarURL] = useState(null);
   const [userAvatar, setUserAvatar] = useState(User?.avatarImg);
-  const router = useRouter();
   
-  const handleEditProfile = () => {
-    hiidenble(false);
-  };
+  const { theme } = useStore((state) => state);
 
   const handleImageChange = (e) => {
     e.preventDefault();
     const file = e.target.files?.[0];
     if (file) {
-      setAvatarfile(file);  // Store the file directly
+      setAvatarfile(file);
       const imageUrl = URL.createObjectURL(file);
       setAvatarURL(imageUrl);
+      setUserAvatar(imageUrl);
     }
-  };
-
-  const DeleteAvatar = () => {
-    setUserAvatar("");
-    setAvatarfile(null);  // Clear the file
   };
 
   const SaveProfile = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('username', username);
-    formData.append('fullname', fullname);
-
+    formData.append("username", username);
+    formData.append("fullname", fullname);
     if (avatarfile) {
-      formData.append('avatar', avatarfile);  // Append the file to FormData
+      formData.append("avatar", avatarfile);
     }
-    const token = Cookie.get('accessToken');
+
+    const token = Cookie.get("accessToken");
     try {
-      const res = await axios.patch("https://spirit-spark-backendv2.onrender.com/api/v1/user/update", formData, 
-        { withCredentials: true,
+      const res = await axios.patch(
+        "https://spirit-spark-backendv2.onrender.com/api/v1/user/update",
+        formData,
+        {
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+          },
         }
-         });
+      );
       console.log(res.data);
       toast.success("Profile updated successfully");
+      hiidenble(false);
       window.location.reload();
     } catch (error) {
       console.log("Something went wrong", error);
@@ -65,58 +61,42 @@ function EditProfile({ User, hiidenble }) {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] backdrop-blur-lg z-50 flex justify-center items-center flex-col absolute">
-      <MdCancel onClick={handleEditProfile} style={{ marginLeft: "270px", marginTop: "-60px", width: "30px", height: "30px" }} />
-      <div>
-        <AiFillDelete onClick={DeleteAvatar} style={{ marginLeft: "100px", marginTop: "10px", width: "30px", height: "30px" }} />
-      </div>
-      <div className="w-[90%] h-[70%]">
-        <div className="w-full h-[80px] flex justify-center items-center">
-          {userAvatar || avatarURL ? (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
+      {/* Full Width Modal */}
+      <div className={`w-full max-w-3xl p-8 rounded-xl shadow-xl relative transition-all duration-300 ${theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"} transform scale-100`}>
+        
+        {/* Close Button */}
+        <button onClick={() => hiidenble(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+          <MdCancel size={28} />
+        </button>
+
+        <h2 className="text-3xl font-bold text-center mb-6">Edit Profile</h2>
+
+        <form onSubmit={SaveProfile} className="space-y-6">
+          <div className="flex flex-col items-center">
+            {userAvatar && <Avatar AvatarUrl={avatarURL || userAvatar} className="w-32 h-32 rounded-full border-4 shadow-lg" />}
+            <label htmlFor="profileImage" className="mt-3 p-2 bg-gray-300 text-gray-900 rounded-full shadow-md cursor-pointer flex items-center gap-2">
+              <Camera className="w-6 h-6" /> Change Avatar
+            </label>
+            <input id="profileImage" type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="absolute left-[-20px] opacity-0 mx-[-60px] my-3 z-50"
-              />
-              <Avatar AvatarUrl={userAvatar || avatarURL} width={20} />
+              <label className="block text-sm font-medium mb-1">Username</label>
+              <Input value={username} onChange={(e) => setUsername(e.target.value)} fullWidth className="text-black" placeholder="Enter your username" />
             </div>
-          ) : (
+
             <div>
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="absolute left-[-20px] opacity-0 mx-[-60px] my-3"
-              />
-              <CgProfile className="z-50" style={{ width: "70px", height: "70px" }} />
+              <label className="block text-sm font-medium mb-1">Full Name</label>
+              <Input value={fullname} onChange={(e) => setFullname(e.target.value)} fullWidth className="text-black" placeholder="Enter your full name" />
             </div>
-          )}
-        </div>
-        <div className="w-full h-[80px] flex justify-center items-center">
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Type here"
-            className="input input-bordered input-error w-full max-w-xs"
-          />
-        </div>
-        <div className="w-full h-[80px] flex justify-center items-center">
-          <input
-            type="text"
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
-            placeholder="Type here"
-            className="input input-bordered input-error w-full max-w-xs"
-          />
-        </div>
-        <div className="w-full h-[80px] flex justify-center items-center">
-          <button
-            onClick={SaveProfile}
-            className="btn w-[100px] text-xl">
-            Save
-          </button>
-        </div>
+          </div>
+
+          <Button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+            Save Changes
+          </Button>
+        </form>
       </div>
     </div>
   );

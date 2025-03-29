@@ -178,7 +178,7 @@ export default function CoupletCards(data) {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <img
+            <Image
               src={data?.Data?.Owner?.avatar}
               alt={data?.Data?.Owner?.username}
               width={40}
