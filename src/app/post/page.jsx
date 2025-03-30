@@ -86,7 +86,7 @@ export default function PoemCard() {
     try {
       console.log(selectedMode);
       console.log(formData);
-      const res = await axios.post(`http://localhost:4000/api/v1/post/${selectedMode?.toLocaleLowerCase()}`, formData, {
+      const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/post/${selectedMode?.toLocaleLowerCase()}`, formData, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
