@@ -241,7 +241,7 @@ export default function PoemCard() {
       <textarea
   className="w-full p-2 border rounded-md text-gray-600 flex justify-center"
   placeholder="Write something (max 250 words)"
-  maxLength={250}
+  maxLength={500}
   value={postText}
   onChange={(e) => {
     setPostText(e.target.value);

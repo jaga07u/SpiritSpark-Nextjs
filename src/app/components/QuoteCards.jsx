@@ -235,7 +235,7 @@ export default function QuoteCard(data) {
             </div>
           </div>
           
-          <Button
+          { user._id != data?.Data?.Owner?._id && <Button
             variant={following ? "secondary" : "outline"}
             size="sm"
             className="transition-all duration-300"
@@ -244,6 +244,7 @@ export default function QuoteCard(data) {
             {following ? <UserCheck className="w-4 h-4 mr-1.5" /> : <UserPlus className="w-4 h-4 mr-1.5" />}
             {following ? "Following" : "Follow"}
           </Button>
+}
         </div>
        
         <p className="text-base leading-relaxed dark:text-gray-300 whitespace-pre-line font-serif">
