@@ -3,9 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import useStore from "../zustandStore/store"
-import toast from "react-hot-toast";
+import {toast}from "react-hot-toast";
 import axios from "axios";
 import Cookie from "js-cookie"
+import {GoogleGenerativeAI} from "@google/generative-ai" 
 const UNSPLASH_ACCESS_KEY = "5aV5DAnzh261jk2ljOgMy8evKANOEG2XnjoPFM30aFM";
 const BASE_URL = "https://api.unsplash.com";
 
@@ -33,6 +34,38 @@ export default function PoemCard() {
   };
   const token = Cookie.get('accessToken');
   console.log(token);
+  const genAI = new GoogleGenerativeAI("YOUR_API_KEY"); // Initialize Gemini API
+  const generateContent = async () => {
+    if (selectedMode === modes[0]) {
+      const toastID = toast.error("Please select a mode");
+    //  toast.dismiss(toastID);
+      return;
+    }
+  
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Get Gemini Model
+  
+      const prompt = `
+        Generate an original and deeply inspiring ${selectedMode} that uplifts the human spirit.
+        - If it's a quote, make it short yet powerful, leaving a lasting impact.
+        - If it's a couplet, craft it in a poetic and rhythmic way, resonating with wisdom and motivation.
+        - If it's a poem, make it heartfelt, rhythmic, and full of positivity, focusing on perseverance, resilience, or self-discovery.
+        - If it's a short story, weave a meaningful narrative that inspires personal growth, overcoming challenges, or the beauty of kindness.
+        - Ensure the content aligns with SpiritSpark’s theme of motivation, positivity, and mental strength.
+      `;
+  
+      const result = await model.generateContent({ contents: [{ role: "user", parts: [{ text: prompt }] }] });
+  
+      const generatedText = result.response.candidates[0]?.content?.parts[0]?.text || "No response received";
+      setPostText(generatedText)
+      console.log(generatedText);
+      toast.success("Content generated successfully!");
+      
+    } catch (error) {
+      console.error("Error generating content:", error);
+      toast.error("Failed to generate content. Please try again.");
+    }
+  };
     const QuoteSubmit = async () => {
     console.log(postText);
     console.log(selectedMode);
@@ -193,7 +226,7 @@ export default function PoemCard() {
   };
 
   return (
-    <div className={`max-w-md p-2 rounded-lg shadow-md relative ${theme=="dark" ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+    <div className={`max-w-md min-h-full  p-2 rounded-lg shadow-md relative ${theme=="dark" ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <button onClick={Back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px", marginTop: "0px",color:`${theme=="dark" ? "white":"black" }`}}/></button>
       <div className="relative h-56 w-full mb-4">
         <img
