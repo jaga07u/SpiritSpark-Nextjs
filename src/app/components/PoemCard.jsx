@@ -208,8 +208,8 @@ export default function PoemCard(data) {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
             <Image
-                  src={data?.Data?.Owner?.avatar}
-                  alt={data?.Data?.Owner?.username}
+                  src={data?.Owner?.avatar}
+                  alt={data?.Owner?.username}
                   width={40}
                   height={40}
                   quality={100}
@@ -225,7 +225,7 @@ export default function PoemCard(data) {
             </div>
           </div>
           
-          { user._id != data?.Data?.Owner?._id && <Button
+          { user._id != data?.Owner?._id && <Button
             variant={following ? "secondary" : "outline"}
             size="sm"
             className="transition-all duration-300"
