@@ -6,7 +6,8 @@ import useStore from "../zustandStore/store"
 import {toast}from "react-hot-toast";
 import axios from "axios";
 import Cookie from "js-cookie"
-import {GoogleGenerativeAI} from "@google/generative-ai" 
+import {GoogleGenerativeAI} from "@google/generative-ai"
+import Image from "next/image"; 
 const UNSPLASH_ACCESS_KEY = "5aV5DAnzh261jk2ljOgMy8evKANOEG2XnjoPFM30aFM";
 const BASE_URL = "https://api.unsplash.com";
 
@@ -34,7 +35,7 @@ export default function PoemCard() {
   };
   const token = Cookie.get('accessToken');
   console.log(token);
-  const genAI = new GoogleGenerativeAI("YOUR_API_KEY"); // Initialize Gemini API
+  const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GENERATIVE_AI_API_KEY); // Initialize Gemini API
   const generateContent = async () => {
     if (selectedMode === modes[0]) {
       const toastID = toast.error("Please select a mode");
@@ -229,7 +230,8 @@ export default function PoemCard() {
     <div className={`max-w-md min-h-full  p-2 rounded-lg shadow-md relative ${theme=="dark" ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <button onClick={Back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px", marginTop: "0px",color:`${theme=="dark" ? "white":"black" }`}}/></button>
       <div className="relative h-56 w-full mb-4">
-        <img
+        <Image
+          
           src={selectedImage || "https://plus.unsplash.com/premium_photo-1717279908053-e0e8618eca45?q=80&w=1457&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D"}
           alt="Selected Content"
           className="w-full h-full object-center rounded-md"
