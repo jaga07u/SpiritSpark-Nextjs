@@ -234,7 +234,7 @@ export default function PoemCard() {
         <img 
           src={selectedImage || "https://plus.unsplash.com/premium_photo-1717279908053-e0e8618eca45?q=80&w=1457&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D"}
           alt="Selected Content"
-          className="w-full h-full object-center rounded-md"
+        className="object-cover w-full h-full transition-transform duration-700 hover:scale-110"
         />
       </div>
 
@@ -244,7 +244,7 @@ export default function PoemCard() {
         maxLength={250}
         value={postText}
         onChange={(e) => setPostText(e.target.value)}
-        style={{ minHeight: "104px", resize: "none", overflowY: "hidden" }}
+        style={{ minHeight: "104px", resize: "none", overflowY: "scroll" }}
       />
 <button 
 //onClick={generateContent}
