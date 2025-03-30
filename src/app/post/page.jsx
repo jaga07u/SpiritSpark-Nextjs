@@ -239,13 +239,18 @@ export default function PoemCard() {
       </div>
 
       <textarea
-        className={`w-full  p-2 border rounded-md text-gray-600 flext justify-center `}
-        placeholder="Write something (max 250 words)"
-        maxLength={250}
-        value={postText}
-        onChange={(e) => setPostText(e.target.value)}
-        style={{ minHeight: "104px", resize: "none", overflowY: "scroll" }}
-      />
+  className="w-full p-2 border rounded-md text-gray-600 flex justify-center"
+  placeholder="Write something (max 250 words)"
+  maxLength={250}
+  value={postText}
+  onChange={(e) => {
+    setPostText(e.target.value);
+    e.target.style.height = "auto"; // Reset height
+    e.target.style.height = e.target.scrollHeight + "px"; // Set new height
+  }}
+  style={{ minHeight: "104px", resize: "none", overflowY: "hidden" }}
+/>
+
 <button 
 //onClick={generateContent}
 className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11cb, #2575fc)' }}>
