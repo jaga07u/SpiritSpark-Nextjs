@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
  "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io';
@@ -230,8 +231,7 @@ export default function PoemCard() {
     <div className={`max-w-md min-h-full  p-2 rounded-lg shadow-md relative ${theme=="dark" ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <button onClick={Back}><IoMdArrowRoundBack style={{ width: "30px", height: "30px", marginTop: "0px",color:`${theme=="dark" ? "white":"black" }`}}/></button>
       <div className="relative h-56 w-full mb-4">
-        <Image
-          
+        <img 
           src={selectedImage || "https://plus.unsplash.com/premium_photo-1717279908053-e0e8618eca45?q=80&w=1457&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D"}
           alt="Selected Content"
           className="w-full h-full object-center rounded-md"
@@ -247,9 +247,9 @@ export default function PoemCard() {
         style={{ minHeight: "104px", resize: "none", overflowY: "hidden" }}
       />
 <button 
-onClick={generateContent}
+//onClick={generateContent}
 className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11cb, #2575fc)' }}>
-  Generate
+  Generate <h1 className="bg-success-600">cooming soon</h1>
 </button>
 
 
