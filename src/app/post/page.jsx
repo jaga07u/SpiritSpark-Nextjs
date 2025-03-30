@@ -249,7 +249,7 @@ export default function PoemCard() {
 <button 
 //onClick={generateContent}
 className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11cb, #2575fc)' }}>
-  Generate <h1 className="bg-success-600">cooming soon</h1>
+  Generate <span className="text-success">Upcoming</span>
 </button>
 
 
