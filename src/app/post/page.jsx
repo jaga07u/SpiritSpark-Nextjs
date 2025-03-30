@@ -244,7 +244,9 @@ export default function PoemCard() {
         onChange={(e) => setPostText(e.target.value)}
         style={{ minHeight: "104px", resize: "none", overflowY: "hidden" }}
       />
-<button className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11cb, #2575fc)' }}>
+<button 
+onClick={generateContent}
+className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11cb, #2575fc)' }}>
   Generate
 </button>
 
