@@ -153,7 +153,8 @@ import { UserPlus, UserCheck, Bookmark, Share2 } from "lucide-react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-
+import Cookie from "js-cookie"
+import { jwtDecode } from "jwt-decode";
 const demoData = {
   image: "https://images.unsplash.com/photo-1738848392298-cf0b62edc750?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   content: "सूरज की तरह चमको, अपने सपनों को पूरा करो।\nरास्ते चाहे कठिन हों, हिम्मत कबी मत हारो।",
@@ -182,6 +183,8 @@ export default function QuoteCard(data) {
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
   };
+  const token = Cookie.get('accessToken');
+   let user=jwtDecode(token);
   console.log(data);
   const handleFollow = async () => {
       setFollowing(!following);

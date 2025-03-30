@@ -157,14 +157,16 @@ import { UserPlus, UserCheck, Bookmark, Share2 } from "lucide-react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
-
+import Cookie from "js-cookie"
+import { jwtDecode } from "jwt-decode";
 export default function PoemCard(data) {
   const [following, setFollowing] = useState(data?.isFollowed);
   const [likeCount, setLikeCount] = useState(data?.likeCount);
   const [isLiked, setIsLiked] = useState(data?.isLiked);
   const [isSaved, setIsSaved] = useState(false);
   const [showBigLotus, setShowBigLotus] = useState(false);
-
+   const token = Cookie.get('accessToken');
+ let user=jwtDecode(token);
   const handleLike = () => {
     setLikeCount(prev => (isLiked ? prev - 1 : prev + 1));
     setIsLiked(!isLiked);
