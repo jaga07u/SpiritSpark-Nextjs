@@ -117,6 +117,8 @@ import Image from "next/image";
 import axios from "axios"
 import Cookie from "js-cookie"
 import { jwtDecode } from "jwt-decode";
+import { Popover, PopoverTrigger, PopoverContent, User } from "@nextui-org/react";
+import { UserTwitterCard } from './UserTweeterCard';
 const demoData = {
   image: "https://images.unsplash.com/photo-1738848392298-cf0b62edc750?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   content: "सूरज की तरह चमको, अपने सपनों को पूरा करो।\nरास्ते चाहे कठिन हों, हिम्मत कबी मत हारो।",
@@ -158,6 +160,21 @@ export default function CoupletCards(data) {
           );
    console.log(res.data)
   };
+  const handleFollow = async () => {
+    setFollowing(!following);
+    const res = await axios.post(
+      `https://spirit-spark-backendv2.onrender.com/api/v1/follow/${data?.Data?.Owner?._id}`,
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+  //   console.log(res.data);
 //   console.log(data);
 // console.log(data[0]?.createdAt);
 
@@ -178,14 +195,22 @@ export default function CoupletCards(data) {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <Image
+          <Popover showArrow placement="bottom">
+             <PopoverTrigger>
+             <Image
               src={data?.Data?.Owner?.avatar}
               alt={data?.Data?.Owner?.username}
               width={40}
-              height={40}
+              height={60}
               quality={100}
               className="w-[50px] h-[50px] rounded-full object-cover aspect-square"
             />
+            </PopoverTrigger>
+            <PopoverContent className="p-1">
+             <UserTwitterCard data={data?.Data} />
+            </PopoverContent>
+          </Popover>
+            
             <div>
               <h3 className="font-semibold text-base dark:text-gray-200">
                 {data?.Data?.Owner?.username}
@@ -200,7 +225,7 @@ export default function CoupletCards(data) {
             variant={following ? "secondary" : "outline"}
             size="sm"
             className="transition-all duration-300"
-            onClick={() => setFollowing(!following)}
+            onClick={handleFollow}
           >
             {following ? <UserCheck className="w-4 h-4 mr-1.5" /> : <UserPlus className="w-4 h-4 mr-1.5" />}
             {following ? "Following" : "Follow"}

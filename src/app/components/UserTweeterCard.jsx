@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Avatar, Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
+import Image from "next/image";
 export const UserTwitterCard = ({ data }) => {
   const [isFollowed, setIsFollowed] = useState(data?.isFollowed);
   const router = useRouter();
@@ -25,10 +25,12 @@ export const UserTwitterCard = ({ data }) => {
     <Card shadow="none" className="max-w-[300px] border-none bg-transparent">
       <CardHeader className="justify-between">
         <div className="flex gap-3">
-          <Avatar
-            isBordered
-            radius="full"
-            size="md"
+          <Image 
+          width={50}
+          height={50}
+           alt="User Avatar"
+           className="rounded-full"
+           quality={100}
             src={data?.Owner?.avatar}
             onClick={GoUserProfile}
             style={{ cursor: 'pointer' }}
@@ -52,12 +54,12 @@ export const UserTwitterCard = ({ data }) => {
           {isFollowed ? "Unfollow" : "Follow"}
         </Button>
       </CardHeader>
-      <CardBody className="px-3 py-0">
+      {/* <CardBody className="px-3 py-0">
         <p className="text-small pl-px text-default-500">
           Full-stack developer, @getnextui lover she/her
           <span aria-label="confetti" role="img">🎉</span>
         </p>
-      </CardBody>
+      </CardBody> */}
       <CardFooter className="gap-3">
         <div className="flex gap-1">
           <p className="font-semibold text-default-600 text-small">{data?.followingCount}</p>

@@ -73,7 +73,7 @@ function Quote() {
                     </div>
              : (
                 <div className="flex justify-center items-center w-full h-full py-32">
-                    <LoadingLotus isLoading={true} />
+                    <LoadingLotus isLoading={loading} />
                 </div>
             )}
         </>

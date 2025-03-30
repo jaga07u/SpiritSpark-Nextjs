@@ -182,6 +182,21 @@ export default function QuoteCard(data) {
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
   };
+  console.log(data);
+  const handleFollow = async () => {
+      setFollowing(!following);
+      const res = await axios.post(
+        `https://spirit-spark-backendv2.onrender.com/api/v1/follow/${data?.Data?.Owner?._id}`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    }
 //   console.log(data);
 // console.log(data[0]?.createdAt);
 
@@ -224,7 +239,7 @@ export default function QuoteCard(data) {
             variant={following ? "secondary" : "outline"}
             size="sm"
             className="transition-all duration-300"
-            onClick={() => setFollowing(!following)}
+            onClick={handleFollow}
           >
             {following ? <UserCheck className="w-4 h-4 mr-1.5" /> : <UserPlus className="w-4 h-4 mr-1.5" />}
             {following ? "Following" : "Follow"}

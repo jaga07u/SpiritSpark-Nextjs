@@ -254,7 +254,7 @@ const handleFollow = async (id) => {
             variant={following ? "secondary" : "outline"}
             size="sm"
             className="transition-all duration-300"
-            onClick={() =>handleFollow(data?.Data?._id)}
+            onClick={() =>handleFollow(data?.Data?.Owner._id)}
           >
             {following ? <UserCheck className="w-4 h-4 mr-1.5" /> : <UserPlus className="w-4 h-4 mr-1.5" />}
             {following ? "Following" : "Follow"}

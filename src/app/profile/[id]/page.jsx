@@ -6,6 +6,7 @@ import { MapPin, Link as LinkIcon, UserPlus,UserCheck, Settings, Heart, MessageC
 import { Button } from "@nextui-org/react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
+import { WhatsappShareButton } from 'react-share';
 import Image from "next/image";
 import axios from "axios"
 import Cookie from "js-cookie"
@@ -37,6 +38,18 @@ function Page({params}) {
     setIsLiked(!isLiked);
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
+    const res=await axios.post(
+                `https://spirit-spark-backendv2.onrender.com/api/v1/like/couplet`,
+                { coupletId: id },
+                {
+                  withCredentials: true,
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+       console.log(res.data)
   }
        const getProfile=async()=>{
     const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${params.id}`,{
@@ -50,9 +63,21 @@ function Page({params}) {
       setFollowing(res.data.data.UserDetails.isFollowed)
       setFollowercount(res.data.data.UserDetails.followerCount)
       setFolloweingcount(res.data.data.UserDetails.followingCount)
-    setPosts(res.data.data.posts);
+      setPosts(res.data.data.posts);
     }
+    console.log(posts);
     
+  let user2=null;
+    if (token) {
+          try {
+            const user = jwtDecode(token); // Decode the token
+            localStorage.setItem("user", JSON.stringify(user)); // Store the user object as a string in localStorage
+            const usstr = localStorage.getItem("user");
+            user2 = JSON.parse(usstr); // Parse the string back to an object
+          } catch (error) {
+            console.error("Invalid token", error);
+          }
+    }
     // const res=await axios.post(
     //         `https://spirit-spark-backendv2.onrender.com/api/v1/like/couplet`,
     //         { coupletId: id },
@@ -145,7 +170,7 @@ function Page({params}) {
                 <div className="flex-shrink-0">
                   <img
                     className="mx-auto h-28 w-28 rounded-full border-4 border-white shadow-lg"
-                    src={curruser?.avatarImg || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop"}
+                    src={curruser?.avatarImg || "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
                     alt="Profile"
                   />
                 </div>
@@ -170,19 +195,28 @@ function Page({params}) {
                 </div>
               </div>
               <div className="mt-5 flex justify-center sm:mt-0">
-                <Button
+               {user2?._id == curruser?._id &&  <Button
                 className="inline-flex items-center px-4 py-2 border cursor-pointer border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 onClick={ProfileEdit}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Edit Profile
-                </Button>
-                <Button
+                </Button> }
+               {user2?._id != curruser?._id && <Button
                  onClick={ProfileEdit}
-                 className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                 <UserPlus className='h-4 w-4 mr-2'/>
-                  Follow
-                </Button>
+                 className="ml-3 inline-flex  items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                 {following == false ? (<div
+                  className="flex "
+                 ><UserPlus className='h-4 w-4 mr-2'/>
+                  <h1>Follow</h1></div>):(
+                     <div
+                      className="flex "
+                     >
+                      <UserCheck className="w-4 h-4 mr-1.5" />
+                      
+                      <h1>Following</h1></div>
+                  )
+                   }</Button> }
               </div>
             </div>
 
@@ -268,7 +302,7 @@ function Page({params}) {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-4">
                     <Image
-                      src={"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop"}
+                      src={curruser?.avatarImg || "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
                       alt={"jagadish"}
                       width={40}
                       height={40}
@@ -306,18 +340,25 @@ function Page({params}) {
                       variant="ghost"
                       size="sm"
                       className={`gap-1.5 transition-all duration-300 ${isLiked ? "text-orange-500" : "text-muted-foreground"}`}
-                      onClick={() => handleLike(1)}
+                      onClick={() => handleLike(selectedPost?._id)}
                     >
-                      <GiLotus className={`w-6 h-6 transition-transform duration-300 ${isLiked ? "scale-110 text-pink-500" : "text-gray-400"}`} />
+                      <GiLotus className={`w-6 h-6 transition-transform duration-300 ${selectedPost?.isLikedByCurrentUser? "scale-110 text-pink-500" : "text-gray-400"}`} />
                       {selectedPost.likes}
                     </Button>
                     {showBigLotus && (
                       <GiLotus className="absolute text-pink-500 opacity-75 animate-ping w-24 h-24 transform -translate-x-1/2" />
                     )}
-                    <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
-                      <Share2 className="w-5 h-5" />
-                      Share
-                    </Button>
+{/* <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary"> */}
+  <WhatsappShareButton
+    url={`${window.location.origin}/share/${selectedPost?._id}`}
+    title={`Check out this couplet: "${selectedPost?.couplet || selectedPost.quote || selectedPost?.poem || selectedPost?.story}"`}
+    separator=" - "
+    className="flex items-center gap-1.5 p-3 border-gray-400"
+  >
+    <Share2 className="w-5 h-5" />
+    Share
+  </WhatsappShareButton>
+{/* </Button> */}
                   </div>
                   <Button
                     variant="ghost"
@@ -338,4 +379,4 @@ function Page({params}) {
   );
 }
 
-export default Page
+export default Page;
