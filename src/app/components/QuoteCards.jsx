@@ -177,11 +177,23 @@ export default function QuoteCard(data) {
   const [isSaved, setIsSaved] = useState(false);
   const [showBigLotus, setShowBigLotus] = useState(false);
 
-  const handleLike = () => {
+  const handleLike = async() => {
     setLikeCount(prev => (isLiked ? prev - 1 : prev + 1));
     setIsLiked(!isLiked);
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
+    const res=await axios.post(
+                `https://spirit-spark-backendv2.onrender.com/api/v1/like/couplet`,
+                { coupletId: id },
+                {
+                  withCredentials: true,
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                }
+              );
+       console.log(res.data)
   };
   const token = Cookie.get('accessToken');
    let user=jwtDecode(token);
