@@ -242,8 +242,8 @@ export default function PoemCard() {
       </div>
 
       <textarea
-  className="w-full p-2 border rounded-md text-gray-600 flex justify-center"
-  placeholder="जीवन जियो, और दूसरों को भी जीना सिखाओ।\n
+  className="w-full p-2 border rounded-md text-gray-600 flex justify-center placeholder:text-wrap"
+  placeholder="जीवन सिर्फ जियो मत, दूसरों को भी जीना सिखाओ।
   अपनी रोशनी बाँटो, औरों को भी जलना सिखाओ।(अपने खूबसूरत शब्द यहाँ लिखें)
   "
   maxLength={500}
