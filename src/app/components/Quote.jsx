@@ -27,7 +27,7 @@ function Quote() {
     const getCardData = async () => {
         try {
           setLoading(true);
-          const res = await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/post/quote/${limit}/${page}`,{withCredentials:true,
+          const res = await axios.get(`http://localhost:4000/api/v1/post/quote/${limit}/${page}`,{withCredentials:true,
              headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'

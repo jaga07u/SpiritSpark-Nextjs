@@ -159,6 +159,8 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import Cookie from "js-cookie"
 import { jwtDecode } from "jwt-decode";
+import { WhatsappShareButton } from "react-share";
+import axios from "axios"
 export default function PoemCard(data) {
   const [following, setFollowing] = useState(data?.isFollowed);
   const [likeCount, setLikeCount] = useState(data?.likeCount);
@@ -167,11 +169,23 @@ export default function PoemCard(data) {
   const [showBigLotus, setShowBigLotus] = useState(false);
    const token = Cookie.get('accessToken');
  let user=jwtDecode(token);
-  const handleLike = () => {
+  const handleLike = async(id) => {
     setLikeCount(prev => (isLiked ? prev - 1 : prev + 1));
     setIsLiked(!isLiked);
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
+    const res=await axios.post(
+      `https://spirit-spark-backendv2.onrender.com/api/v1/like/poem`,
+      { poemId: id },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+console.log(res.data)
   };
   const handleFollow = async () => {
     setFollowing(!following);
@@ -247,7 +261,7 @@ export default function PoemCard(data) {
               variant="ghost"
               size="sm"
               className={`gap-1.5 transition-all duration-300 ${isLiked ? "text-orange-500" : "text-muted-foreground"}`}
-              onClick={handleLike}
+              onClick={()=>handleLike(data?._id)}
             >
               <GiLotus className={`w-6 h-6 transition-transform duration-300 ${isLiked ? "scale-110 text-pink-500" : "text-gray-400"}`} />
               {likeCount}
@@ -256,17 +270,24 @@ export default function PoemCard(data) {
               <GiLotus className="absolute text-pink-500 opacity-75 animate-ping w-24 h-24 transform -translate-x-1/2" />
             )}
            
-            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
-              <Share2 className="w-5 h-5" />
-              Share
-            </Button>
+              <WhatsappShareButton
+                            url={`${window.location.origin}/share/${data?.Data?._id}`}
+                            title={`Check out this couplet: "${data?.couplet || data?.quote || data?.poem || data?.story}"`}
+                            separator=" - "
+                            className="flex items-center gap-1.5 text-muted-foreground hover:text-primary"
+                          >
+                          {/* <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary"> */}
+                          <Share2 className="w-5 h-5" />
+                          Share
+                        {/* </Button> */}
+            </WhatsappShareButton>
           </div>
           <Button
             variant="ghost"
             size="sm"
             className={`transition-colors duration-300 ${isSaved ? "text-primary" : "text-muted-foreground"}`}
             onClick={() => setIsSaved(!isSaved)}
-          >
+          >  <span className="text-success-200">cooming</span>
             <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>

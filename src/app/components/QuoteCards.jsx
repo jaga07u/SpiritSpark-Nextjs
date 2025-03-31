@@ -155,18 +155,20 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import Cookie from "js-cookie"
 import { jwtDecode } from "jwt-decode";
-const demoData = {
-  image: "https://images.unsplash.com/photo-1738848392298-cf0b62edc750?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  content: "सूरज की तरह चमको, अपने सपनों को पूरा करो।\nरास्ते चाहे कठिन हों, हिम्मत कबी मत हारो।",
-  user: {
-    name: "आर्य देव",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
-  },
-  contentType: "poem",
-  timestamp: new Date(),
-  isFollowing: false,
-  likes: 120,
-};
+import axios from "axios"
+import { WhatsappShareButton } from "react-share";
+// const demoData = {
+//   image: "https://images.unsplash.com/photo-1738848392298-cf0b62edc750?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//   content: "सूरज की तरह चमको, अपने सपनों को पूरा करो।\nरास्ते चाहे कठिन हों, हिम्मत कबी मत हारो।",
+//   user: {
+//     name: "आर्य देव",
+//     image: "https://randomuser.me/api/portraits/men/45.jpg",
+//   },
+//   contentType: "poem",
+//   timestamp: new Date(),
+//   isFollowing: false,
+//   likes: 120,
+// };
 
 export default function QuoteCard(data) {
   console.log(data);
@@ -177,14 +179,16 @@ export default function QuoteCard(data) {
   const [isSaved, setIsSaved] = useState(false);
   const [showBigLotus, setShowBigLotus] = useState(false);
 
-  const handleLike = async() => {
+  const handleLike = async(id) => {
+    console.log(id);
+
     setLikeCount(prev => (isLiked ? prev - 1 : prev + 1));
     setIsLiked(!isLiked);
     setShowBigLotus(true);
     setTimeout(() => setShowBigLotus(false), 1000);
     const res=await axios.post(
-                `https://spirit-spark-backendv2.onrender.com/api/v1/like/couplet`,
-                { coupletId: id },
+                `https://spirit-spark-backendv2.onrender.com/api/v1/like/quote`,
+                { quoteId: id },
                 {
                   withCredentials: true,
                   headers: {
@@ -272,7 +276,7 @@ export default function QuoteCard(data) {
               variant="ghost"
               size="sm"
               className={`gap-1.5 transition-all duration-300 ${isLiked ? "text-orange-500" : "text-muted-foreground"}`}
-              onClick={handleLike}
+              onClick={()=>handleLike(data?.Data?._id)}
             >
               <GiLotus className={`w-6 h-6 transition-transform duration-300 ${isLiked ? "scale-110 text-pink-500" : "text-gray-400"}`} />
               {likeCount}
@@ -281,10 +285,17 @@ export default function QuoteCard(data) {
               <GiLotus className="absolute text-pink-500 opacity-75 animate-ping w-24 h-24 transform -translate-x-1/2" />
             )}
            
-            <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary">
+            <WhatsappShareButton
+                url={`${window.location.origin}/share/${data?.Data?._id}`}
+                title={`Check out this couplet: "${data?.Data?.couplet || data?.Data?.quote || data?.Data?.poem || data?.Data?.story}"`}
+                separator=" - "
+                className="flex items-center gap-1.5 text-muted-foreground hover:text-primary"
+              >
+              {/* <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-primary"> */}
               <Share2 className="w-5 h-5" />
               Share
-            </Button>
+            {/* </Button> */}
+              </WhatsappShareButton>
           </div>
           <Button
             variant="ghost"
@@ -292,6 +303,7 @@ export default function QuoteCard(data) {
             className={`transition-colors duration-300 ${isSaved ? "text-primary" : "text-muted-foreground"}`}
             onClick={() => setIsSaved(!isSaved)}
           >
+              <span className="text-success-200">cooming</span>
             <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>

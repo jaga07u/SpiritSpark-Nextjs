@@ -3,7 +3,7 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import { MapPin, Link as LinkIcon, UserPlus,UserCheck, Settings, Heart, MessageCircle, Bookmark, X, Share2 } from 'lucide-react'
-import { Button } from "@nextui-org/react";
+import { Button, user } from "@nextui-org/react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
 import { WhatsappShareButton } from 'react-share';
@@ -261,10 +261,10 @@ function Page({params}) {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 text-white flex space-x-4">
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <Heart className="h-6 w-6 mr-1" />
                       <span>{post.likeCount}</span>
-                    </div>
+                    </div> */}
                     {/* <div className="flex items-center">
                       <MessageCircle className="h-6 w-6 mr-1" />
                       <span>{post.comments}</span>
@@ -315,7 +315,7 @@ function Page({params}) {
                       </h3>
                     </div>
                   </div>
-                  {1 != 1  ? (
+                  {user2?._id != curruser?._id  ? (
                     <Button
                       variant={following ? "secondary" : "outline"}
                       size="sm"
@@ -327,7 +327,7 @@ function Page({params}) {
                     </Button>
                   ):(
                     <>
-                    <Dropdown QuoteId={selectedPost?._id}/>
+                    <Dropdown Id={selectedPost?._id}/>
                     </>
                   )}
                 </div>
