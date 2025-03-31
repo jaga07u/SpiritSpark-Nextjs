@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -9,8 +9,8 @@ import useStore from "../zustandStore/store";
 function Dropdown({ Id }) {
   const router = useRouter();
   const token = Cookie.get("accessToken");
-  const theme=useStore((state)=>state.theme);
-  // Check the user's preferred theme
+  const theme = useStore((state) => state.theme);
+
   const UpdateQuote = () => {
     console.log("hii", Id);
     router.push(`post/${Id}`);
@@ -39,6 +39,7 @@ function Dropdown({ Id }) {
 
   return (
     <div className="relative">
+      {/* Three dots button */}
       <div
         tabIndex={0}
         role="button"
@@ -46,20 +47,27 @@ function Dropdown({ Id }) {
       >
         <BsThreeDotsVertical style={{ width: "30px", height: "30px" }} />
       </div>
+
+      {/* Dropdown Menu */}
       <ul
         tabIndex={0}
-        className={`dropdown-content z-[1] menu p-2 shadow rounded-box min-w-32 mx-[-80px] ${
+        className={`absolute right-0 dropdown-content z-[1] flex flex-col p-2 shadow-lg rounded-lg min-w-40 ${
           theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
         }`}
       >
         <li
-          className="flex justify-between items-center"
-          onClick={() => UpdateQuote(Id)}
+          className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded-md"
+          onClick={UpdateQuote}
         >
-          <a>Edit Quote <span className="text-sm text-success-300">coming</span></a>
+          <span className="flex justify-between items-center">
+            Edit Quote <span className="text-sm text-green-500">coming</span>
+          </span>
         </li>
-        <li onClick={DeletePost}>
-          <a>Delete Quote</a>
+        <li
+          className="w-full px-4 py-2 hover:bg-red-500 hover:text-white cursor-pointer rounded-md"
+          onClick={DeletePost}
+        >
+          Delete Quote
         </li>
       </ul>
     </div>
