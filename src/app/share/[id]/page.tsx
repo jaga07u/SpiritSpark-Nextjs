@@ -75,7 +75,7 @@ function Page({ params }) {
   return (
     <>
    {
-    data?.length > 0 ?
+    data?
     <div className="w-full overflow-hidden transition-all duration-500 hover:shadow-xl dark:shadow-primary/5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/90 dark:to-gray-900/90 border-opacity-50">
      <div className="relative h-56 overflow-hidden">
         <img
