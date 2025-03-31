@@ -235,7 +235,7 @@ console.log(res.data)
             />
             </PopoverTrigger>
             <PopoverContent className="p-1">
-             <UserTwitterCard data={data?.Data} />
+             <UserTwitterCard data={data} />
             </PopoverContent>
           </Popover>
             <div>
