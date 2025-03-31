@@ -153,13 +153,15 @@
 import { useState } from "react";
 //import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@nextui-org/react";
-import { UserPlus, UserCheck, Bookmark, Share2 } from "lucide-react";
+import { UserPlus, UserCheck, Bookmark, Share2, } from "lucide-react";
 import { GiLotus } from "react-icons/gi";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import Cookie from "js-cookie"
 import { jwtDecode } from "jwt-decode";
-import { WhatsappShareButton } from "react-share";
+import { Popover, PopoverTrigger, PopoverContent, User } from "@nextui-org/react";
+import { UserTwitterCard } from './UserTweeterCard';
+import {WhatsappShareButton} from "react-share"; 
 import axios from "axios"
 export default function PoemCard(data) {
   const [following, setFollowing] = useState(data?.isFollowed);
@@ -221,18 +223,23 @@ console.log(res.data)
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <Image
-                  src={data?.Owner?.avatar}
-                  alt={data?.Owner?.username}
-                  width={40}
-                  height={40}
-                  quality={100}
-                  className="w-[50px] h-[50px] rounded-full object-cover aspect-square"
-                       />
+          <Popover showArrow placement="bottom">
+             <PopoverTrigger>
+             <Image
+              src={data?.Owner?.avatar}
+              alt={data?.Owner?.username}
+              width={40}
+              height={60}
+              quality={100}
+              className="w-[50px] h-[50px] rounded-full object-cover aspect-square"
+            />
+            </PopoverTrigger>
+            <PopoverContent className="p-1">
+             <UserTwitterCard data={data?.Data} />
+            </PopoverContent>
+          </Popover>
             <div>
-              <h3 className="font-semibold text-base dark:text-gray-200">
-                {data?.Owner?.username}
-              </h3>
+           
               {/* <p className="text-xs font-medium text-muted-foreground">
                 {contentType.charAt(0).toUpperCase() + contentType.slice(1)}
               </p> */}

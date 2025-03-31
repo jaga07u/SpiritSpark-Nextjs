@@ -165,7 +165,8 @@ import Image from "next/image";
 import Cookie from "js-cookie"
 import { jwtDecode } from "jwt-decode";
 import { WhatsappShareButton } from "react-share";
-
+import { UserTwitterCard } from './UserTweeterCard';
+import { Popover, PopoverTrigger, PopoverContent, User } from "@nextui-org/react";
 const demoData = {
   image: "https://images.unsplash.com/photo-1738848392298-cf0b62edc750?q=80&w=1372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   content: "सूरज की तरह चमको, अपने सपनों को पूरा करो।\nरास्ते चाहे कठिन हों, हिम्मत कबी मत हारो।",
@@ -234,18 +235,22 @@ const handleFollow = async (id) => {
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <Image
-              src={data?.Data?.Owner?.avatar}
-              alt={data?.Data?.Owner?.username}
+          <Popover showArrow placement="bottom">
+             <PopoverTrigger>
+             <Image
+             src={data?.Data?.Owner?.avatar}
+             alt={data?.Data?.Owner?.username}
               width={40}
-              height={40}
+              height={60}
               quality={100}
               className="w-[50px] h-[50px] rounded-full object-cover aspect-square"
             />
+            </PopoverTrigger>
+            <PopoverContent className="p-1">
+             <UserTwitterCard data={data?.Data} />
+            </PopoverContent>
+          </Popover>
             <div>
-              <h3 className="font-semibold text-base dark:text-gray-200">
-                {data?.Data?.Owner?.username}
-              </h3>
               {/* <p className="text-xs font-medium text-muted-foreground">
                 {contentType.charAt(0).toUpperCase() + contentType.slice(1)}
               </p> */}
