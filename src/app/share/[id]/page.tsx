@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -47,7 +48,7 @@ function Page({ params }) {
       setData(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-      setLoading(false);
+      setLoading(false)
     }
   };
   console.log(data)
@@ -70,10 +71,13 @@ function Page({ params }) {
       }
     );
   };
-
+ 
   return (
+    <>
+   {
+    data?.length > 0 ?
     <div className="w-full overflow-hidden transition-all duration-500 hover:shadow-xl dark:shadow-primary/5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/90 dark:to-gray-900/90 border-opacity-50">
-     {data?.length>0 ? <><div className="relative h-56 overflow-hidden">
+     <div className="relative h-56 overflow-hidden">
         <img
           src={data?.data?.BgImageUrl}
           alt="Spiritual content"
@@ -139,15 +143,16 @@ function Page({ params }) {
             <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>
-      </div> </>:(
-        <>
-         <div className="flex justify-center items-center w-full h-full py-32">
-                           { loading && <LoadingLotus isLoading={true} /> }
-          </div>
-        </>
-      )
-      }
-    </div>
+      </div>
+    </div>:(
+      <>
+      <div className="flex justify-center items-center w-full h-full py-32">
+  { loading && <LoadingLotus isLoading={true} /> }
+      </div>
+      </>
+    )
+     }
+    </>
   );
 }
 
