@@ -17,7 +17,7 @@ function Dropdown({Id}) {
    // router.push(`https://spirit-spark-backendv2.onrender.com//api/v1/post/${Id}`);
     try{
      const res = await axios.delete(
-                    `http://localhost:4000/api/v1/post/delete/${Id}`,
+                    `https://spirit-spark-backendv2.onrender.com/api/v1/post/delete/${Id}`,
                     {
                         withCredentials: true,
                         headers: {
