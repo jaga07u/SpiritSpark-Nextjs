@@ -71,7 +71,10 @@ export default function PoemCard() {
     const QuoteSubmit = async () => {
     console.log(postText);
     console.log(selectedMode);
-    
+    if(postText.length<=10){
+         toast.error("please Enter more content...😊");
+         return ;
+    }
     // if (!(image.length > 0)) {
     //   toast.error("Please select an image");
     //   return;
@@ -240,7 +243,9 @@ export default function PoemCard() {
 
       <textarea
   className="w-full p-2 border rounded-md text-gray-600 flex justify-center"
-  placeholder="Write something (max 250 words)"
+  placeholder="जीवन जियो, और दूसरों को भी जीना सिखाओ।\n
+  अपनी रोशनी बाँटो, औरों को भी जलना सिखाओ।(अपने खूबसूरत शब्द यहाँ लिखें)
+  "
   maxLength={500}
   value={postText}
   onChange={(e) => {
