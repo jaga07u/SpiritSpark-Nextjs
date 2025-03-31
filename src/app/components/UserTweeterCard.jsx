@@ -27,6 +27,7 @@ export const UserTwitterCard = ({ data }) => {
         <div className="flex gap-3">
            <User   
           as="button"
+          onClick={GoUserProfile}
           name={`${data?.Owner?.username}`}
          // description="Product Designer"
           className="transition-transform"
@@ -34,14 +35,6 @@ export const UserTwitterCard = ({ data }) => {
             src: `${data?.Owner?.avatar}`
           }}
         />
-          <div className="flex flex-col items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">
-              {data?.Owner?.username}
-            </h4>
-            <h5 className="text-small tracking-tight text-default-500">
-              {data?.Owner?.username}
-            </h5>
-          </div>
         </div>
         <Button
           className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
