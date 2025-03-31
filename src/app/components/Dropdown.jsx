@@ -13,7 +13,7 @@ function Dropdown({ Id }) {
 
   const UpdateQuote = () => {
     console.log("hii", Id);
-    router.push(`post/${Id}`);
+   // router.push(`post/${Id}`);
   };
 
   const DeletePost = async () => {
@@ -56,12 +56,10 @@ function Dropdown({ Id }) {
         }`}
       >
         <li
-          className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded-md"
+          className="w-full flex px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded-md"
           onClick={UpdateQuote}
         >
-          <span className="flex justify-between items-center">
-            Edit Quote <span className="text-sm text-green-500">coming</span>
-          </span>
+              Edit Quote <span className="text-sm text-green-500">coming</span>
         </li>
         <li
           className="w-full px-4 py-2 hover:bg-red-500 hover:text-white cursor-pointer rounded-md"
