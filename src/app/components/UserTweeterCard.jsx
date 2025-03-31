@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader,User } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
@@ -25,16 +25,15 @@ export const UserTwitterCard = ({ data }) => {
     <Card shadow="none" className="max-w-[300px] border-none bg-transparent">
       <CardHeader className="justify-between">
         <div className="flex gap-3">
-          <Image 
-          width={50}
-          height={50}
-           alt="User Avatar"
-           className="rounded-full"
-           quality={100}
-            src={data?.Owner?.avatar}
-            onClick={GoUserProfile}
-            style={{ cursor: 'pointer' }}
-          />
+           <User   
+          as="button"
+          name={`${data?.Owner?.username}`}
+         // description="Product Designer"
+          className="transition-transform"
+          avatarProps={{
+            src: `${data?.Owner?.avatar}`
+          }}
+        />
           <div className="flex flex-col items-start justify-center">
             <h4 className="text-small font-semibold leading-none text-default-600">
               {data?.Owner?.username}
