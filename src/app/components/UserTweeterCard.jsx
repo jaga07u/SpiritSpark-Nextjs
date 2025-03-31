@@ -17,7 +17,12 @@ export const UserTwitterCard = ({ data }) => {
   const handleFollow = async () => {
     setIsFollowed((prev) => !prev);
     try {
-      const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/follow/${data?.Owner?._id}`,{data:"jaga"},{withCredentials:true});
+      const res = await axios.post(`https://spirit-spark-backendv2.onrender.com/api/v1/follow/${data?.Owner?._id}`,{},{withCredentials:true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       console.log(res.data);
     } catch (error) {
       console.error("Error following/unfollowing the user:", error);
