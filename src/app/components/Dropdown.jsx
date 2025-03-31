@@ -11,6 +11,7 @@ function Dropdown({ Id }) {
   const token = Cookie.get("accessToken");
   const theme=useStore((state)=>state.theme);
   // Check the user's preferred theme
+
   const UpdateQuote = () => {
     console.log("hii", Id);
     router.push(`post/${Id}`);
@@ -48,19 +49,15 @@ function Dropdown({ Id }) {
       </div>
       <ul
         tabIndex={0}
-        className={`dropdown-content z-[1] menu p-2 shadow rounded-box min-w-32 mx-[-80px] ${
-          theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"
-        }`}
+        className={`dropdown-content z-[1] menu p-2 shadow rounded-box min-w-32 mx-[-80px]`}
       >
         <li
           className="flex justify-between items-center"
           onClick={() => UpdateQuote(Id)}
         >
-        <a>Edit Quote <span className="text-sm text-success-300">coming</span></a>
+          <a>Edit Quote <span className="text-sm text-success-300">coming</span></a>
         </li>
-        <li 
-        className="flex justify-between items-center"
-        onClick={DeletePost}>
+        <li onClick={DeletePost}>
           <a>Delete Quote</a>
         </li>
       </ul>
