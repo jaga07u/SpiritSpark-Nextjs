@@ -2,7 +2,6 @@
  "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { IoMdArrowRoundBack } from 'react-icons/io';
-import { Camera } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import useStore from "../zustandStore/store"
 import {toast}from "react-hot-toast";
@@ -10,6 +9,7 @@ import axios from "axios";
 import Cookie from "js-cookie"
 import {GoogleGenerativeAI} from "@google/generative-ai"
 import Image from "next/image"; 
+import { Camera } from "lucide-react";
 const UNSPLASH_ACCESS_KEY = "5aV5DAnzh261jk2ljOgMy8evKANOEG2XnjoPFM30aFM";
 const BASE_URL = "https://api.unsplash.com";
 
@@ -240,14 +240,6 @@ export default function PoemCard() {
           alt="Selected Content"
         className="object-cover w-full h-full transition-transform duration-700 hover:scale-110"
         />
-          <button
-        onClick={() => setIsDialogOpen(true)}
-        className="btn btn-outline mt-4"
-      >
-        <Camera className="w-5 h-5"/>
-        Select Image
-      </button>
-
       </div>
 
       <textarea
@@ -285,6 +277,15 @@ className="btn mt-4 w-full" style={{ background: 'linear-gradient(135deg, #6a11c
           </button>
         ))}
       </div>
+
+      <button
+        onClick={() => setIsDialogOpen(true)}
+        className={`btn btn-outline mt-4 ${theme == 'dark'?"text-white":"text-gray-800"} `}
+      >
+        <Camera className="w-5 h-5"/>
+        Select Image
+      </button>
+
       <button className="btn btn-primary mt-4 w-full"
       onClick={()=>QuoteSubmit()}
       >Post</button>
