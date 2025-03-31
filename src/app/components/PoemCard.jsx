@@ -280,7 +280,7 @@ console.log(res.data)
             )}
            
               <WhatsappShareButton
-                            url={`${window.location.origin}/share/${data?.Data?._id}`}
+                            url={`${window.location.origin}/share/${data?._id}`}
                             title={`Check out this couplet: "${data?.couplet || data?.quote || data?.poem || data?.story}"`}
                             separator=" - "
                             className="flex items-center gap-1.5 text-muted-foreground hover:text-primary"

@@ -13,7 +13,7 @@ import { UserTwitterCard } from "../../components/UserTweeterCard";
 import { GiLotus } from "react-icons/gi";
 import { Bookmark, Share2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-
+import LoadingLotus from "../../components/LoadinLotos";
 function Page({ params }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -21,6 +21,7 @@ function Page({ params }) {
   const [data, setData] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [showBigLotus, setShowBigLotus] = useState(false);
+     const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +31,7 @@ function Page({ params }) {
 
   const getCardData = async () => {
     const token = Cookie.get("accessToken");
+    setLoading(true);
     try {
       const res = await axios.get(
         `https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/share/${params.id}`,
@@ -41,9 +43,11 @@ function Page({ params }) {
           },
         }
       );
+      setLoading(false);
       setData(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
     }
   };
   console.log(data)
@@ -69,7 +73,7 @@ function Page({ params }) {
 
   return (
     <div className="w-full overflow-hidden transition-all duration-500 hover:shadow-xl dark:shadow-primary/5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/90 dark:to-gray-900/90 border-opacity-50">
-      <div className="relative h-56 overflow-hidden">
+     {data?.length>0 ? <><div className="relative h-56 overflow-hidden">
         <img
           src={data?.data?.BgImageUrl}
           alt="Spiritual content"
@@ -135,7 +139,14 @@ function Page({ params }) {
             <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>
-      </div>
+      </div> </>:(
+        <>
+         <div className="flex justify-center items-center w-full h-full py-32">
+                           { loading && <LoadingLotus isLoading={true} /> }
+          </div>
+        </>
+      )
+      }
     </div>
   );
 }
