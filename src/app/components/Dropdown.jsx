@@ -39,7 +39,7 @@ function Dropdown({ Id }) {
   };
 
   return (
-    <div className="relative">
+    <div className="dropdown mx-[-25px] border-none outline-none shadow-none ">
       <div
         tabIndex={0}
         role="button"
@@ -49,7 +49,9 @@ function Dropdown({ Id }) {
       </div>
       <ul
         tabIndex={0}
-        className={`dropdown-content z-[1] menu p-2 shadow rounded-box min-w-32 mx-[-80px]`}
+        className={`dropdown-content z-[1] menu p-2 shadow rounded-box min-w-32 mx-[-80px]
+          
+        ${ theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"}`}
       >
         <li
           className="flex justify-between items-center"
