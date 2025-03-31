@@ -11,11 +11,6 @@ function Dropdown({ Id }) {
   const token = Cookie.get("accessToken");
   const theme=useStore((state)=>state.theme);
   // Check the user's preferred theme
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") || "light";
-    setTheme(storedTheme);
-  }, []);
-
   const UpdateQuote = () => {
     console.log("hii", Id);
     router.push(`post/${Id}`);
