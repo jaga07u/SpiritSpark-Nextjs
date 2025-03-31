@@ -3,10 +3,13 @@ import { Avatar, Button, Card, CardBody, CardFooter, CardHeader,User } from "@ne
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import Cookie from "js-cookie"
+import { jwtDecode } from "jwt-decode";
 export const UserTwitterCard = ({ data }) => {
   const [isFollowed, setIsFollowed] = useState(data?.isFollowed);
   const router = useRouter();
-
+   const token = Cookie.get('accessToken');
+   let user=jwtDecode(token);
   const GoUserProfile = () => {
     router.push(`/profile/${data?.Owner?._id}`);
   };
@@ -36,7 +39,7 @@ export const UserTwitterCard = ({ data }) => {
           }}
         />
         </div>
-        <Button
+      {user?._id != data?.Owner?._id &&  <Button
           className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
           color="primary"
           radius="full"
@@ -45,6 +48,7 @@ export const UserTwitterCard = ({ data }) => {
         >
           {isFollowed ? "Unfollow" : "Follow"}
         </Button>
+}
       </CardHeader>
       {/* <CardBody className="px-3 py-0">
         <p className="text-small pl-px text-default-500">

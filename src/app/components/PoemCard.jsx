@@ -239,7 +239,9 @@ console.log(res.data)
             </PopoverContent>
           </Popover>
             <div>
-           
+            <h3 className="font-semibold text-base dark:text-gray-200">
+                {data?.Owner?.username}
+              </h3>
               {/* <p className="text-xs font-medium text-muted-foreground">
                 {contentType.charAt(0).toUpperCase() + contentType.slice(1)}
               </p> */}
