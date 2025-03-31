@@ -102,7 +102,7 @@ function Page({ params }) {
           <h3 className="font-semibold text-base dark:text-gray-200">{data?.data?.Owner?.username}</h3>
         </div>
 
-        <p className="text-base leading-relaxed dark:text-gray-300 font-serif">{data?.data?.couplet}</p>
+        <p className="text-base leading-relaxed dark:text-gray-300 font-serif">{data?.data?.couplet || data?.data?.poem || data?.data?.story ||  data?.data?.quote}</p>
 
         <div className="flex items-center justify-between pt-4 border-t dark:border-gray-700/50">
           <div className="flex items-center gap-4 relative">

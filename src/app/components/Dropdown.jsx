@@ -14,7 +14,7 @@ function Dropdown({ Id }) {
 
   const UpdateQuote = () => {
     console.log("hii", Id);
-    router.push(`post/${Id}`);
+   // router.push(`post/${Id}`);
   };
 
   const DeletePost = async () => {
