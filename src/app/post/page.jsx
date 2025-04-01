@@ -218,7 +218,7 @@ export default function PoemCard() {
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64String = reader.result; // This is the complete data URI
-            const base64Image = imageString.replace(/^data:image\/\w+;base64,/, '');
+            const base64Image = base64String.replace(/^data:image\/\w+;base64,/, ''); // Remove the data URI prefix
             setBase64Data(base64Image); // Save the full base64 string
 
             // Log base64Data here
@@ -227,6 +227,7 @@ export default function PoemCard() {
         reader.readAsDataURL(file); // Read the image file as a data URL
     }
 };
+
   const handleImageSelect = (img) => {
     setSelectedImage(img);
     setIsDialogOpen(false);
