@@ -218,7 +218,8 @@ export default function PoemCard() {
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64String = reader.result; // This is the complete data URI
-            setBase64Data(base64String); // Save the full base64 string
+            const base64Image = imageString.replace(/^data:image\/\w+;base64,/, '');
+            setBase64Data(base64Image); // Save the full base64 string
 
             // Log base64Data here
             console.log(base64String); // This will show the base64 data
