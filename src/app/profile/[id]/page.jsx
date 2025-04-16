@@ -182,11 +182,12 @@ function Page({params}) {
             <div className="sm:flex sm:items-center sm:justify-between">
               <div className="sm:flex sm:space-x-5">
                 <div className="flex-shrink-0">
-                  <img
-                    className="mx-auto h-28 w-28 rounded-full border-4 border-white shadow-lg"
-                    src={curruser?.avatarImg || "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
-                    alt="Profile"
-                  />
+                <img
+  className="mx-auto h-28 w-28 rounded-full border-4 border-white shadow-lg object-cover"
+  src={curruser?.avatarImg || "https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg"}
+  alt="Profile"
+/>
+
                 </div>
                 <div className="mt-4 sm:mt-0 sm:pt-1 sm:text-left">
                   <div className="flex items-center">
