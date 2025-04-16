@@ -301,17 +301,18 @@ function Page({params}) {
               <div className="absolute inset-0 bg-black opacity-75"></div>
             </div>
             <div className="w-full overflow-hidden transition-all duration-500 hover:shadow-xl dark:shadow-primary/5 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/90 dark:to-gray-900/90 backdrop-blur-sm border-opacity-50">
-              <div className="relative h-56 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10" />
-                <img
-                  src={selectedPost?.BgImageUrl}
-                  alt="Spiritual content"
-                  className="w-full h-auto object-contain transition-transform duration-700 hover:scale-110"
-                />
-                <div className="absolute bottom-4 left-4 z-20 text-white/90 text-sm">
-                  {formatDistanceToNow(new Date(Date.parse(new Date())), { addSuffix: true })}
-                </div>
-              </div>
+            <div className="relative w-full overflow-hidden">
+  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent z-10" />
+  <img
+    src={selectedPost?.BgImageUrl}
+    alt="Spiritual content"
+    className="w-full h-auto object-contain transition-transform duration-700 hover:scale-110"
+  />
+  <div className="absolute bottom-4 left-4 z-20 text-white/90 text-sm">
+    {formatDistanceToNow(new Date(Date.parse(new Date())), { addSuffix: true })}
+  </div>
+</div>
+
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-4">
