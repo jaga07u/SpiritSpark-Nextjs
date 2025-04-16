@@ -325,7 +325,7 @@ function Page({params}) {
                     />
                     <div>
                       <h3 className="font-semibold text-base dark:text-gray-200">
-                        jagadish
+                        {curruser?.username}
                       </h3>
                     </div>
                   </div>
