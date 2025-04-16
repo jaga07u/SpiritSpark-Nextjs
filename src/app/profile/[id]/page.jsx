@@ -310,7 +310,7 @@ function Page({params}) {
     className="w-full h-auto object-contain transition-transform duration-700 hover:scale-110"
   />
   <div className="absolute bottom-4 left-4 z-20 text-white/90 text-sm">
-    {formatDistanceToNow(new Date(Date.parse(selectedPost?.createdAt)), { addSuffix: true })}
+    {formatDistanceToNow(new Date(Date.parse(new Date())), { addSuffix: true })}
   </div>
 </div>
 
