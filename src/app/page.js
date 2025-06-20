@@ -32,6 +32,7 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} 
 import SearchUser from "./components/User"
 import { jwtDecode } from "jwt-decode";
 import  {toast} from "react-hot-toast";
+import { log } from "console";
 
 export default function Home() {
   const [QuoteDetails, setQuoteDetails] = useState(null);
@@ -59,10 +60,12 @@ export default function Home() {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
   },});
+   console.log(res.data);
      if(res.data.status !== "success") {
         await logout();
         route.push('/login');
        toast.error("Session expired, please login again");
+       return ;
      }
       console.log(res.data);
       setCurrUser(res.data.data.UserDetails);
