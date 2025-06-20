@@ -31,6 +31,7 @@ import useStore from "./zustandStore/store.js"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} from "@nextui-org/react";
 import SearchUser from "./components/User"
 import { jwtDecode } from "jwt-decode";
+import  {toast} from "react-hot-toast";
 
 export default function Home() {
   const [QuoteDetails, setQuoteDetails] = useState(null);
@@ -51,14 +52,22 @@ export default function Home() {
 
   const token = Cookie.get('accessToken');
   const getProfile=async(id)=>{
-    const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${id}`,{
+    try {
+       const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${id}`,{
      withCredentials:true,
      headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
   },});
-    console.log(res.data);
+     console.log(res.data);
       setCurrUser(res.data.data.UserDetails);
+    } catch (error) {
+        await logout();
+        route.push('/login');
+       toast.error("Session expired, please login again");
+    }
+   
+  
     }
   useEffect(() => {
     let user2;
