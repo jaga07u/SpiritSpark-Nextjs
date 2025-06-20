@@ -32,7 +32,6 @@ import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,useDisclosure} 
 import SearchUser from "./components/User"
 import { jwtDecode } from "jwt-decode";
 import  {toast} from "react-hot-toast";
-import { log } from "console";
 
 export default function Home() {
   const [QuoteDetails, setQuoteDetails] = useState(null);
