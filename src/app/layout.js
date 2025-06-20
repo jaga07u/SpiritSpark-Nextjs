@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       <head>
       </head>
       <body className={` ${inter.className}`}>
-        <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>
+        <GoogleOAuthProvider clientId="268896652345-r83gh7cu57vs8rvdoglporoa9l8fqgv0.apps.googleusercontent.com">
         <Providers>
          <Toaster position="top-center" /> 
         {children}
