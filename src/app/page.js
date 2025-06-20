@@ -87,7 +87,13 @@ export default function Home() {
 
   useEffect(() => {
     let user2;
-  
+   const screenWidth = window.innerWidth;
+  if (screenWidth > 768) {
+    toast.error("For bigger screen version will come soon");
+    setTimeout(() => {
+      logout(); // call your existing logout function
+    }, 1500);
+  }
     if (token) {
       try {
         const user = jwtDecode(token); // Decode the token
