@@ -5,7 +5,7 @@ import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
+import {jwt_decode} from "jwt-decode";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -37,8 +37,10 @@ export default function page() {
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       const decoded = jwt_decode(credentialResponse.credential);
+      console.log("Decoded Google Token:", decoded);
+      
       const { email, name, picture, sub } = decoded;
-
+      console.log("Google User Info:", { email, name, picture, sub });
       const res = await axios.post(
         "https://spirit-spark-backendv2.onrender.com/api/v1/user/signin",
         {
@@ -49,13 +51,14 @@ export default function page() {
         },
         { withCredentials: true }
       );
+      console.log("Google Login Response:", res.data);
 
       Cookie.set("accessToken", res.data.data.token, { path: "/", expires: 1 });
       toast.success("Logged in with Google");
       route.push("/");
     } catch (error) {
       console.error("Google login error", error);
-      toast.error("Google login failed");
+      toast.error("Sorry, something went wrong with Google login .Please try with email and password");
     }
   };
 

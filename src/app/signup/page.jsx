@@ -31,6 +31,33 @@ function Page() {
           setError(true);
         }
        }
+        const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const decoded = jwt_decode(credentialResponse.credential);
+      console.log("Decoded Google Token:", decoded);
+      
+      const { email, name, picture, sub } = decoded;
+      console.log("Google User Info:", { email, name, picture, sub });
+      const res = await axios.post(
+        "https://spirit-spark-backendv2.onrender.com/api/v1/user/signin",
+        {
+          email,
+          name,
+          avatar: picture,
+          googleId: sub,
+        },
+        { withCredentials: true }
+      );
+      console.log("Google Login Response:", res.data);
+
+      Cookie.set("accessToken", res.data.data.token, { path: "/", expires: 1 });
+      toast.success("Logged in with Google");
+      route.push("/");
+    } catch (error) {
+      console.error("Google login error", error);
+      toast.error("Sorry, something went wrong with Google login .Please try  manually");
+    }
+  };
     return (
         <>
    <section className="bg-white">
@@ -148,6 +175,13 @@ function Page() {
                 </div>
               </div>
             </form>
+             <div className="mt-6">
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() => toast.error("Google login failed")}
+                      useOneTap
+                    />
+                  </div>
             <div className="mt-3 space-y-3">
             {/* <GoogleLogin
   onSuccess={async(credentialResponse) => {
@@ -186,13 +220,14 @@ onClick={login}
             </div>
           </div>
         </div>
-        <div className="h-full w-full">
+        {/* <div className="h-full w-full">
           <img
             className="mx-auto h-full w-full rounded-md object-cover"
             src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1742&q=80"
             alt=""
           />
-        </div>
+        </div> */}
+        
       </div>
     </section>
         </>
