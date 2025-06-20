@@ -59,7 +59,12 @@ export default function Home() {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
   },});
-     console.log(res.data);
+     if(res.data.status !== "success") {
+        await logout();
+        route.push('/login');
+       toast.error("Session expired, please login again");
+     }
+      console.log(res.data);
       setCurrUser(res.data.data.UserDetails);
     } catch (error) {
         await logout();
