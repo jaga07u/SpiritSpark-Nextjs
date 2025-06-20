@@ -84,16 +84,25 @@ export default function Home() {
     
   }
 };
+const checkScreenWidthAndLogout = () => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth > 768) {
+      toast.error("For bigger screen version will come soon. Supporting only mobile version for now.");
+      setTimeout(() => {
+        logout();
+      }, 2500);
+    }
+  };
 
   useEffect(() => {
     let user2;
-   const screenWidth = window.innerWidth;
-  if (screenWidth > 768) {
-    toast.error("For bigger screen version will come soon.Supporting only mobile version for now.");
-    setTimeout(() => {
-      logout(); // call your existing logout function
-    }, 2500);
-  }
+  checkScreenWidthAndLogout();
+
+  // Add event listener on resize
+  window.addEventListener("resize", checkScreenWidthAndLogout);
+
+  // Cleanup listener on unmount
+  
     if (token) {
       try {
         const user = jwtDecode(token); // Decode the token
@@ -109,6 +118,9 @@ export default function Home() {
     } else {
       console.error("No token found");
     }
+    return () => {
+    window.removeEventListener("resize", checkScreenWidthAndLogout);
+  };
   }, []);
  
   let user;
