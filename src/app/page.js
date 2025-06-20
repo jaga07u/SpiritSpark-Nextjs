@@ -49,33 +49,51 @@ export default function Home() {
   const postChange=()=>{
     route.push('/post/');
   }
-
-  const token = Cookie.get('accessToken');
-  const getProfile=async(id)=>{
-    try {
-       const res=await axios.get(`https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${id}`,{
-     withCredentials:true,
-     headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-  },});
+ 
    console.log(res.data);
-     if(res.data.status !== "success") {
-        await logout();
-        route.push('/login');
-       toast.error("Session expired, please login again");
-       return ;
-     }
-      console.log(res.data);
-      setCurrUser(res.data.data.UserDetails);
-    } catch (error) {
-        await logout();
-        route.push('/login');
-       toast.error("Session expired, please login again");
+    Cookie.remove('accessToken');
+    localStorage.removeItem("user");
+    route.push('/login');
+  }
+  const token = Cookie.get('accessToken');
+  const logout=async()=>{
+   const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,
+    headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+}});
+ const getProfile = async (id) => {
+  try {
+    const res = await axios.get(
+      `https://spirit-spark-backendv2.onrender.com/api/v1/users/profile/post/${id}`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log(res.data);
+    setCurrUser(res.data.data.UserDetails);
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      // Clear token cookie
+      Cookie.remove('accessToken');
+      // Clear localStorage
+      localStorage.removeItem('user');
+      // Redirect to login
+      route.push('/login');
+      // Show toast
+      toast.error("Session expired. Please login again.");
+    } else {
+      console.error("An unexpected error occurred:", error);
+      toast.error("Something went wrong. Try again.");
     }
-   
-  
-    }
+  }
+};
+
   useEffect(() => {
     let user2;
   
@@ -129,17 +147,7 @@ export default function Home() {
   }
   // console.log(user);
   
-  const logout=async()=>{
-   const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,
-    headers: {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-}});
-   console.log(res.data);
-    Cookie.remove('accessToken');
-    localStorage.removeItem("user");
-    route.push('/login');
-  }
+ 
   const selectedValue = React.useMemo(
     () =>Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
