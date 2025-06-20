@@ -40,7 +40,7 @@ export default function page() {
       const { email, name, picture, sub } = decoded;
 
       const res = await axios.post(
-        "https://spirit-spark-backendv2.onrender.com/api/v1/user/google-auth",
+        "https://spirit-spark-backendv2.onrender.com/api/v1/user/signin",
         {
           email,
           name,
