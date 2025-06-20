@@ -9,7 +9,7 @@ import {GoogleOAuthProvider} from "@react-oauth/google"
 
 
 const inter = Inter({ subsets: ["latin"] });
-
+// import { GoogleOAuthProvider } from '@react-oauth/google';
 export const metadata = {
   title: "SpiritSpark",
   icons:{
