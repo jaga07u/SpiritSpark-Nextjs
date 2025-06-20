@@ -10,13 +10,13 @@ import axios from 'axios'
 import {useForm} from "react-hook-form"
 import {toast} from "react-hot-toast"
 import Cookie from "js-cookie"
+  import { Eye, EyeOff } from 'lucide-react';
 
 export default function page() {
     const route=useRouter();
     const {register,handleSubmit,formState:{errors}}=useForm();
     const [error,setError]=useState(false);
-
-
+  const [showPassword, setShowPassword] = useState(false);
     const login = async (data) => {
      // console.log(data);
       try {
@@ -82,30 +82,32 @@ export default function page() {
                   {errors.email && <span className="text-red-600">Email is required</span>}
                 </div>
               </div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="" className="text-base font-medium text-gray-900">
-                    {' '}
-                    Password{' '}
-                  </label>
-                  <a href="/forgotpassword" title="" className="text-sm font-semibold text-black hover:underline">
-                    {' '}
-                    Forgot password?{' '}
-                  </a>
-                </div>
-                <div className="mt-2">
-                  <input
-                    className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                    type="password"
-                    placeholder="Password"
-                    {...register("password",{required:true
-                   })}
-                    // value={user.password}
-                    // onChange={(e)=>setUser({...user,password:e.target.value})}
-                  ></input>
-                  {errors.password && <span className="text-red-600">Password required</span>}
-                </div>
-              </div>
+             <div>
+  <div className="flex items-center justify-between">
+    <label htmlFor="password" className="text-base font-medium text-gray-900">
+      Password
+    </label>
+    <a href="/forgotpassword" className="text-sm font-semibold text-black hover:underline">
+      Forgot password?
+    </a>
+  </div>
+  <div className="mt-2 relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 pr-10 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+      placeholder="Password"
+      {...register("password", { required: true })}
+    />
+    <div
+      className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <EyeOff className="w-5 h-5 text-gray-600" /> : <Eye className="w-5 h-5 text-gray-600" />}
+    </div>
+    {errors.password && <span className="text-red-600">Password required</span>}
+  </div>
+</div>
+
               <div>
                 <button
                   type="submit"
