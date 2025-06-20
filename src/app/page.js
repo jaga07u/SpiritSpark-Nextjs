@@ -67,20 +67,19 @@ export default function Home() {
     console.log(res.data);
     setCurrUser(res.data.data.UserDetails);
   } catch (error) {
-    // if (error.response && error.response.status === 401) {
-    //   // Clear token cookie
-    //   await logout();
-    //   Cookie.remove('accessToken');
-    //   // Clear localStorage
-    //   localStorage.removeItem('user');
-    //   // Redirect to login
-    //   route.push('/login');
-    //   // Show toast
-    //   toast.error("Session expired. Please login again.");
-    // } else {
-    //   console.error("An unexpected error occurred:", error);
-    //   toast.error("Something went wrong. Try again.");
-    // }
+    if (error.response && error.response.status === 401) {
+      // Clear token cookie
+      Cookie.remove('accessToken');
+      // Clear localStorage
+      localStorage.removeItem('user');
+      // Redirect to login
+      route.push('/login');
+      // Show toast
+      toast.error("Session expired. Please login again.");
+    } else {
+      console.error("An unexpected error occurred:", error);
+      toast.error("Something went wrong. Try again.");
+    }
     console.log(Error);
     
   }

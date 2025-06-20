@@ -24,7 +24,7 @@ export default function page() {
              { withCredentials: true }
             );
           toast.success("Logged In Successfully");
-          Cookie.set('accessToken', res.data.data.data.Token, { path: '/', expires: 7 });
+          Cookie.set('accessToken', res.data.data.data.Token, { path: '/', expires: 1 });
           route.push('/');
       } catch (error) {
           console.log("Invalid credentials", error);
