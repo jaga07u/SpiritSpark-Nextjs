@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import {Providers} from "./Provider"
+import {GoogleOAuthProvider} from "@react-oauth/google"
 // import { GoogleOAuthProvider} from '@react-oauth/google';
 
 
@@ -33,10 +34,12 @@ export default function RootLayout({ children }) {
       <head>
       </head>
       <body className={` ${inter.className}`}>
+        <GoogleOAuthProvider clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}>
         <Providers>
          <Toaster position="top-center" /> 
         {children}
         </Providers>
+        </GoogleOAuthProvider>
         </body>
         
     </html>
