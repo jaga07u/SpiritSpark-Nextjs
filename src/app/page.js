@@ -69,6 +69,7 @@ export default function Home() {
   } catch (error) {
     if (error.response && error.response.status === 401) {
       // Clear token cookie
+      await logout();
       Cookie.remove('accessToken');
       // Clear localStorage
       localStorage.removeItem('user');
