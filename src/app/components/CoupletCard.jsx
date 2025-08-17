@@ -274,7 +274,7 @@ export default function CoupletCards(data) {
             className={`transition-colors duration-300 ${isSaved ? "text-primary" : "text-muted-foreground"}`}
             onClick={() => setIsSaved(!isSaved)}
           >
-            <span className="text-success-200">cooming</span>
+            <span className="text-success-200">coming</span>
             <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
           </Button>
         </div>
