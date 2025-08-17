@@ -20,11 +20,13 @@ export default function page() {
 
   const login = async (data) => {
     try {
+       const toastid=toast.loading("Wait Server is staring...");
       const res = await axios.post(
         "https://spirit-spark-backendv2.onrender.com/api/v1/user/signin",
         data,
         { withCredentials: true }
       );
+      toast.dismiss(toastid);
       toast.success("Logged In Successfully");
       Cookie.set("accessToken", res.data.data.data.Token, { path: "/", expires: 1 });
       route.push("/");

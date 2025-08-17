@@ -84,12 +84,23 @@ export default function Home() {
     
   }
 };
+  const logout=async()=>{
+   const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,
+    headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+}});
+   console.log(res.data);
+    Cookie.remove('accessToken');
+    localStorage.removeItem("user");
+    route.push('/login');
+  }
 const checkScreenWidthAndLogout = () => {
     const screenWidth = window.innerWidth;
     if (screenWidth > 768) {
       toast.error("For bigger screen version will come soon. Supporting only mobile version for now.");
-      setTimeout(() => {
-        logout();
+      setTimeout(async() => {
+         await logout();
       }, 2500);
     }
   };
@@ -156,17 +167,7 @@ const checkScreenWidthAndLogout = () => {
   }
   // console.log(user);
   
-  const logout=async()=>{
-   const res =await axios.delete("https://spirit-spark-backendv2.onrender.com/api/v1/user/signout",{withCredentials:true,
-    headers: {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-}});
-   console.log(res.data);
-    Cookie.remove('accessToken');
-    localStorage.removeItem("user");
-    route.push('/login');
-  }
+
   const selectedValue = React.useMemo(
     () =>Array.from(selectedKeys).join(", ").replaceAll("_", " "),
     [selectedKeys]
